@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "88894421378",
+    "project_id": "tournament-maker-478a7",
+    "storage_bucket": "tournament-maker-478a7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:88894421378:android:e9b749dddf9835376c379b",
+        "android_client_info": {
+          "package_name": "com.example.tournamentmaker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "88894421378-8laq6mh9h01jire8kv0bmv13p1kr7vqr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAThWva2InG6m4QYUkz0MllXgbBFAh6a80"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "88894421378-8laq6mh9h01jire8kv0bmv13p1kr7vqr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
