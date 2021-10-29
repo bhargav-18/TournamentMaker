@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".authactivity.authfragments.ui.auth.AuthFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/auth_iv"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/tournament"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/auth_iv">
+
+            <TextView
+                android:id="@+id/intro_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="WELCOME TO TOURNAMENT MAKER"
+                android:textColor="#3A3A3A"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_navigate_to_register_screen"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:drawableStart="@drawable/ic_email"
+                android:enabled="true"
+                android:foregroundGravity="center_vertical"
+                android:text="Register with Email and password"
+                app:layout_constraintEnd_toEndOf="@id/intro_tv"
+                app:layout_constraintStart_toStartOf="@id/intro_tv"
+                app:layout_constraintTop_toBottomOf="@id/intro_tv" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_google_sign_in"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:drawableStart="@drawable/custom_icon"
+                android:enabled="true"
+                android:text="Continue with Google"
+                app:layout_constraintEnd_toEndOf="@+id/button_navigate_to_register_screen"
+                app:layout_constraintStart_toStartOf="@+id/button_navigate_to_register_screen"
+                app:layout_constraintTop_toBottomOf="@+id/button_navigate_to_register_screen" />
+
+
+            <TextView
+                android:id="@+id/text_view_already_user_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="24dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:minHeight="48dp"
+                android:text="Already have an account ?"
+                android:textColor="#3A3A3A"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/button_google_sign_in"
+                app:layout_constraintStart_toStartOf="@+id/button_google_sign_in"
+                app:layout_constraintTop_toBottomOf="@+id/button_google_sign_in" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
