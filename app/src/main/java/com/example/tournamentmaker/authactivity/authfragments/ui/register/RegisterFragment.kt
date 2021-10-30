@@ -85,11 +85,13 @@ class RegisterFragment : Fragment(R.layout.fragment_register_user) {
         binding.apply {
             cvProgressRegister.isVisible = bool
             if (bool) {
+                parentLayoutRegister.alpha = 0.5f
                 activity?.window!!.setFlags(
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                 )
             } else {
+                parentLayoutRegister.alpha = 1f
                 activity?.window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             }
         }

@@ -81,11 +81,13 @@ class LoginFragment : Fragment(R.layout.fragment_login_user) {
         binding.apply {
             cvProgressLogin.isVisible = bool
             if (bool) {
+                parentLayoutLogin.alpha = 0.5f
                 activity?.window!!.setFlags(
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                 )
             } else {
+                parentLayoutLogin.alpha = 1f
                 activity?.window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             }
         }

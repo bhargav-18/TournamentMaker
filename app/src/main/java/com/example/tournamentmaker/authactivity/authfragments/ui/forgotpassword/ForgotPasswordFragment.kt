@@ -65,11 +65,13 @@ class ForgotPasswordFragment : Fragment(R.layout.fragment_forgot_password) {
         binding.apply {
             cvProgressForgot.isVisible = bool
             if (bool) {
+                parentLayoutForgot.alpha = 0.5f
                 activity?.window!!.setFlags(
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                 )
             } else {
+                parentLayoutForgot.alpha = 1f
                 activity?.window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             }
         }
