@@ -2,6 +2,8 @@ package com.example.tournamentmaker.authactivity.authfragments.ui.forgotpassword
 
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -32,6 +34,7 @@ class ForgotPasswordFragment : Fragment(R.layout.fragment_forgot_password) {
             }
 
             buttonForgotPassword.setOnClickListener {
+                showProgress(true)
                 viewModel.forgotPassword()
             }
         }
@@ -47,12 +50,29 @@ class ForgotPasswordFragment : Fragment(R.layout.fragment_forgot_password) {
                             Snackbar.LENGTH_LONG
                         ).show()
                         findNavController().navigate(ForgotPasswordFragmentDirections.actionGlobalLoginFragment())
+                        showProgress(false)
                     }
                     is ForgotPasswordViewModel.ForgotPasswordEvent.ShowErrorMessage -> {
+                        showProgress(false)
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
                     }
                 }.exhaustive
             }
         }
     }
+
+    private fun showProgress(bool: Boolean) {
+        binding.apply {
+            cvProgressForgot.isVisible = bool
+            if (bool) {
+                activity?.window!!.setFlags(
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                )
+            } else {
+                activity?.window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            }
+        }
+    }
+
 }

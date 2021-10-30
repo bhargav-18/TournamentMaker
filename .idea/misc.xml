@@ -3,12 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/drawable-v24/button_background.xml" value="0.2203125" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/drawable-v24/custom_button.xml" value="0.2203125" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/drawable-v24/custom_icon.xml" value="0.2203125" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/drawable-v24/ic_email.xml" value="0.2203125" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/drawable-v24/ic_password.xml" value="0.2203125" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/drawable-v24/ic_person.xml" value="0.2203125" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/drawable-v24/ic_wave.xml" value="0.2203125" />
+        <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/drawable/progress_bg.xml" value="0.2203125" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/activity_auth.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/activity_main.xml" value="0.19907407407407407" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/auth_fragment.xml" value="0.20416666666666666" />
@@ -17,6 +19,7 @@
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/fragment_forgot_password.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/fragment_login_user.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/fragment_register_user.xml" value="0.18" />
+        <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/progress_dialog.xml" value="0.20416666666666666" />
       </map>
     </option>
   </component>

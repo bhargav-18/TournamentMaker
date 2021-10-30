@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -43,6 +45,7 @@ class LoginFragment : Fragment(R.layout.fragment_login_user) {
             }
             btnLogin.setOnClickListener {
                 hideKeyboard(activity as Activity)
+                showProgress(true)
                 viewModel.login()
                 etLoginPassword.setText("")
             }
@@ -63,11 +66,27 @@ class LoginFragment : Fragment(R.layout.fragment_login_user) {
                             startActivity(it)
                             requireActivity().finish()
                         }
+                        showProgress(false)
                     }
                     is LoginViewModel.LoginEvent.ShowErrorMessage -> {
+                        showProgress(false)
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
                     }
                 }.exhaustive
+            }
+        }
+    }
+
+    private fun showProgress(bool: Boolean) {
+        binding.apply {
+            cvProgressLogin.isVisible = bool
+            if (bool) {
+                activity?.window!!.setFlags(
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                )
+            } else {
+                activity?.window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             }
         }
     }
