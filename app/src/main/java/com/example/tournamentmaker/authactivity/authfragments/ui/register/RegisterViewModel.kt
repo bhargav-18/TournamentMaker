@@ -9,6 +9,7 @@ import com.example.tournamentmaker.data.entity.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -58,12 +59,11 @@ class RegisterViewModel constructor(
         if (error != null) {
             showErrorMessage(error)
         } else {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 try {
                     auth.createUserWithEmailAndPassword(email, password).await()
                 } catch (e: Exception) {
                     showErrorMessage(e.message.toString())
-                    return@launch
                 }
                 if (auth.currentUser != null) {
                     val uid = auth.currentUser?.uid!!

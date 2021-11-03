@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.tournamentmaker.authactivity.AUTH_RESULT_OK
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -18,7 +19,6 @@ class LoginViewModel constructor(
     private val loginEventChannel = Channel<LoginEvent>()
     val loginEvent = loginEventChannel.receiveAsFlow()
     private val auth = FirebaseAuth.getInstance()
-    private val users = FirebaseFirestore.getInstance().collection("users")
 
     var email = state.get<String>("email") ?: ""
         set(value) {
@@ -37,12 +37,11 @@ class LoginViewModel constructor(
             val error = "The field must not be empty"
             showErrorMessage(error)
         } else {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 try {
                     auth.signInWithEmailAndPassword(email, password).await()
                 } catch (e: Exception) {
                     showErrorMessage(e.message.toString())
-                    return@launch
                 }
                 loginEventChannel.send(LoginEvent.NavigateBackWithResult(AUTH_RESULT_OK))
             }

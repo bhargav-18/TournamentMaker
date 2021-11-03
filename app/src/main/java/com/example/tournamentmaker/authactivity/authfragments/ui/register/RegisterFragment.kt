@@ -55,8 +55,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register_user) {
                 hideKeyboard(activity as Activity)
                 showProgress(true)
                 viewModel.register()
-                etRegisterPassword.setText("")
-                etRegisterCpassword.setText("")
             }
             textViewRegisterToLogin.setOnClickListener {
                 findNavController().navigate(RegisterFragmentDirections.actionGlobalLoginFragment())
@@ -93,6 +91,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register_user) {
             } else {
                 parentLayoutRegister.alpha = 1f
                 activity?.window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                etRegisterPassword.setText("")
+                etRegisterCpassword.setText("")
             }
         }
     }

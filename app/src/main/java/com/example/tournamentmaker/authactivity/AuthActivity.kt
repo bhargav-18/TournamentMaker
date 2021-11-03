@@ -1,13 +1,18 @@
 package com.example.tournamentmaker.authactivity
 
 import android.app.Activity
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.tournamentmaker.R
+import com.example.tournamentmaker.mainactivity.MainActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class AuthActivity : AppCompatActivity() {
 
@@ -17,7 +22,15 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_auth) as NavHostFragment
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            Intent(this, MainActivity::class.java).also {
+                startActivity(it)
+                finish()
+            }
+        }
+
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_auth) as NavHostFragment
         navController = navHostFragment.findNavController()
 
 

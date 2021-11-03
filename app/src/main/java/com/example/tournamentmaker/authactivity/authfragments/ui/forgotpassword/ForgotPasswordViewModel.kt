@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.tournamentmaker.authactivity.AUTH_RESULT_OK
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -29,12 +30,11 @@ class ForgotPasswordViewModel constructor(
             val error = "The field must not be empty"
             showErrorMessage(error)
         } else {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.Main) {
                 try {
                     auth.sendPasswordResetEmail(email).await()
                 } catch (e: Exception) {
                     showErrorMessage(e.message.toString())
-                    return@launch
                 }
                 forgotPasswordEventChannel.send(
                     ForgotPasswordEvent.NavigateBackWithResult(

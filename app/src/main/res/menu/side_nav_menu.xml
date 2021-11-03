@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title="General">
+        <menu>
+            <item
+                android:id="@+id/profileFragment"
+                android:title="Profile" />
+            <item
+                android:id="@+id/homeFragment"
+                android:title="Home" />
+            <item
+                android:id="@+id/addTournamentFragment"
+                android:title="Add Tournaments" />
+            <item
+                android:id="@+id/searchTournamentFragment"
+                android:title="Search Tournament" />
+        </menu>
+    </item>
+
+    <item android:title="Authorization">
+        <menu>
+            <item
+                android:id="@+id/signOutDialogFragment"
+                android:title="Sign out" />
+        </menu>
+    </item>
+
+</menu>

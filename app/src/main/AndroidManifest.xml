@@ -12,20 +12,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TournamentMaker">
-        <activity
-            android:name=".authactivity.AuthActivity"
-            android:exported="true">
+        <activity android:name=".authactivity.AuthActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".mainactivity.MainActivity"
-            android:exported="true">
+        <activity android:name=".mainactivity.MainActivity" />
 
-        </activity>
+
     </application>
 
 </manifest>

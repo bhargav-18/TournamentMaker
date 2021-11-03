@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_main"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.tournamentmaker.mainactivity.mainfragments.ui.home.HomeFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/addTournamentFragment"
+        android:name="com.example.tournamentmaker.mainactivity.mainfragments.ui.addtournament.AddTournamentFragment"
+        android:label="Add Tournament"
+        tools:layout="@layout/fragment_add_tournament" />
+    <fragment
+        android:id="@+id/searchTournamentFragment"
+        android:name="com.example.tournamentmaker.mainactivity.mainfragments.ui.searchtournament.SearchTournamentFragment"
+        android:label="Search Tournament"
+        tools:layout="@layout/fragment_search_tournament" />
+    <dialog
+        android:id="@+id/signOutDialogFragment"
+        android:name="com.example.tournamentmaker.mainactivity.mainfragments.ui.signout.SignOutDialogFragment"
+        android:label="Sign out" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.tournamentmaker.mainactivity.mainfragments.ui.profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+</navigation>

@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -23,7 +24,7 @@ class AuthViewModel : ViewModel() {
 
     fun googleSignIn(account: Task<GoogleSignInAccount>) {
         account.let {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.Main) {
                 try {
                     val credentials =
                         GoogleAuthProvider.getCredential(it.result.idToken, null)

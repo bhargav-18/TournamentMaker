@@ -62,11 +62,11 @@ class LoginFragment : Fragment(R.layout.fragment_login_user) {
                 @Suppress("IMPLICIT_CAST_TO_ANY")
                 when (event) {
                     is LoginViewModel.LoginEvent.NavigateBackWithResult -> {
+                        showProgress(false)
                         Intent(requireContext(), MainActivity::class.java).also {
                             startActivity(it)
                             requireActivity().finish()
                         }
-                        showProgress(false)
                     }
                     is LoginViewModel.LoginEvent.ShowErrorMessage -> {
                         showProgress(false)
@@ -89,6 +89,7 @@ class LoginFragment : Fragment(R.layout.fragment_login_user) {
             } else {
                 parentLayoutLogin.alpha = 1f
                 activity?.window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                etLoginPassword.setText("")
             }
         }
     }
