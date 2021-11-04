@@ -1,15 +1,19 @@
 package com.example.tournamentmaker.adapter
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.tournamentmaker.R
 import com.example.tournamentmaker.data.entity.Tournament
 import com.example.tournamentmaker.data.entity.User
 import com.example.tournamentmaker.databinding.ListItemsTournamentsBinding
@@ -48,6 +52,7 @@ class MyTournamentAdapter(val type: String) :
         return MyTournamentViewHolder(binding)
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(
         holder: MyTournamentViewHolder,
@@ -65,6 +70,25 @@ class MyTournamentAdapter(val type: String) :
             }
             personsJoined.text =
                 "${tournament.persons.size} / ${tournament.maxPersons}"
+            if (!tournament.scheduled) {
+                btnJoin.background.setTint(
+                    btnJoin.context.resources.getColor(
+                        R.color.red, null
+                    )
+                )
+            } else if (tournament.persons.size >= tournament.maxPersons) {
+                btnJoin.background.setTint(
+                    btnJoin.context.resources.getColor(
+                        R.color.gray, null
+                    )
+                )
+            } else {
+                btnJoin.background.setTint(
+                    btnJoin.context.resources.getColor(
+                        R.color.green, null
+                    )
+                )
+            }
             btnJoin.setOnClickListener {
                 onJoinClickListener?.let {
                     it(tournament)

@@ -26,18 +26,20 @@ class SignOutDialogFragment : DialogFragment() {
                         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
                             .build()
                     val signInClient = GoogleSignIn.getClient(requireActivity(), option)
-                    signInClient.signOut().addOnSuccessListener {
-                        Intent(requireContext(), AuthActivity::class.java).also {
-                            startActivity(it)
-                            requireActivity().finish()
+                    if (signInClient.signOut().isSuccessful) {
+                        withContext(Dispatchers.Main) {
+                            Intent(requireContext(), AuthActivity::class.java).also {
+                                startActivity(it)
+                                requireActivity().finish()
+                            }
                         }
-
-                    }
-                    Firebase.auth.signOut()
-                    withContext(Dispatchers.Main) {
-                        Intent(requireContext(), AuthActivity::class.java).also {
-                            startActivity(it)
-                            requireActivity().finish()
+                    } else {
+                        Firebase.auth.signOut()
+                        withContext(Dispatchers.Main) {
+                            Intent(requireContext(), AuthActivity::class.java).also {
+                                startActivity(it)
+                                requireActivity().finish()
+                            }
                         }
                     }
                 }

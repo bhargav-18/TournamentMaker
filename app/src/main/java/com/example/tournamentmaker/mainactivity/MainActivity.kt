@@ -54,8 +54,7 @@ class MainActivity : AppCompatActivity() {
             setOf(
                 R.id.homeFragment,
                 R.id.addTournamentFragment,
-                R.id.searchTournamentFragment,
-                R.id.signOutDialogFragment
+                R.id.searchTournamentFragment
             )
         ).setOpenableLayout(drawerLayout)
             .build()
