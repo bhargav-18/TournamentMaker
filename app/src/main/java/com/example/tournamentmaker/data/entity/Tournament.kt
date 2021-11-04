@@ -1,14 +1,18 @@
 package com.example.tournamentmaker.data.entity
 
+import com.google.firebase.firestore.IgnoreExtraProperties
+
+@IgnoreExtraProperties
 data class Tournament(
-    val tournamentName: String,
-    val tournamentSport: String,
-    val tournamentType: String,
-    val tournamentVisibility: String,
+    val id: String = "",
+    val tournamentName: String = "",
+    val tournamentSport: String = "",
+    val tournamentType: String = "",
+    val tournamentVisibility: String = "",
     val tournamentPassword: String = "",
-    val tournamentAccessPassword: String,
+    val tournamentAccessPassword: String = "",
     val scheduled: Boolean = false,
-    val numberOfPerson: Int = 0,
+    val maxPersons: Int = 0,
     val persons: ArrayList<String?> = arrayListOf(),
-    val hosts: ArrayList<String?>
+    val host: String = ""
 )

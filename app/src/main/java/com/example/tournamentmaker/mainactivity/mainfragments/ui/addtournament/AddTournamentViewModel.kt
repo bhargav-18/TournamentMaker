@@ -79,16 +79,17 @@ class AddTournamentViewModel constructor(
             showErrorMessage(error)
         } else {
             viewModelScope.launch(Dispatchers.IO) {
+                val id = tournaments.document().id
                 val tournament = Tournament(
+                    id = id,
                     tournamentName = name,
                     tournamentSport = sport,
                     tournamentType = type,
                     tournamentVisibility = tournamentVisibility,
                     tournamentPassword = tournamentPassword,
                     tournamentAccessPassword = tournamentAccessPassword,
-                    hosts = arrayListOf(Firebase.auth.currentUser?.uid)
+                    host = Firebase.auth.currentUser?.uid.toString()
                 )
-                val id = tournaments.document().id
                 tournaments.document(id).set(tournament).await()
                 users.document(Firebase.auth.currentUser!!.uid)
                     .update("tournamentsCreated", FieldValue.arrayUnion(id)).await()

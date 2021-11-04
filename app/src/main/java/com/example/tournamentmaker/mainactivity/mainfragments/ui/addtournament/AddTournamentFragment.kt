@@ -9,6 +9,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.tournamentmaker.R
 import com.example.tournamentmaker.databinding.FragmentAddTournamentBinding
 import com.example.tournamentmaker.util.exhaustive
@@ -111,6 +112,7 @@ class AddTournamentFragment : Fragment(R.layout.fragment_add_tournament) {
                 when (event) {
                     is AddTournamentViewModel.AddTournamentEvent.NavigateBackWithResult -> {
                         showProgress(false)
+                        findNavController().navigate(AddTournamentFragmentDirections.actionAddTournamentFragmentToHomeFragment())
                     }
                     is AddTournamentViewModel.AddTournamentEvent.ShowErrorMessage -> {
                         showProgress(false)

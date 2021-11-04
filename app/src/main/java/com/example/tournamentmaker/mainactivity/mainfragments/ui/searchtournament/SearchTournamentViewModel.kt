@@ -1,4 +1,6 @@
 package com.example.tournamentmaker.mainactivity.mainfragments.ui.searchtournament
 
-class SearchTournamentViewModel {
+import androidx.lifecycle.ViewModel
+
+class SearchTournamentViewModel: ViewModel() {
 }
