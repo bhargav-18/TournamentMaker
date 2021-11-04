@@ -1,7 +1,6 @@
 package com.example.tournamentmaker.authactivity.authfragments.ui.register
 
 import android.app.Activity
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager

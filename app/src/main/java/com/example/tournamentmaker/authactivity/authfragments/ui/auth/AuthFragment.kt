@@ -35,7 +35,6 @@ class AuthFragment : Fragment(R.layout.fragment_auth_screen) {
                 findNavController().navigate(AuthFragmentDirections.actionGlobalLoginFragment())
             }
             buttonGoogleSignIn.setOnClickListener {
-                showProgress(true)
                 val option = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(getString(R.string.default_web_client_id))
                     .requestEmail()
@@ -91,6 +90,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth_screen) {
         if (requestCode == REQUEST_CODE_SIGN_IN) {
             val account = GoogleSignIn.getSignedInAccountFromIntent(data)
             account.let {
+                showProgress(true)
                 viewModel.googleSignIn(it)
             }
         }

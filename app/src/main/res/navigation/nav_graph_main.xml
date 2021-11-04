@@ -32,5 +32,19 @@
         android:id="@+id/profileFragment"
         android:name="com.example.tournamentmaker.mainactivity.mainfragments.ui.profile.ProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_signOutDialogFragment"
+            app:destination="@id/signOutDialogFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileDialogFragment"
+            app:destination="@id/editProfileDialogFragment" />
+    </fragment><action android:id="@+id/action_global_profileFragment" app:destination="@id/profileFragment"/>
+    <dialog
+        android:id="@+id/editProfileDialogFragment"
+        android:name="com.example.tournamentmaker.mainactivity.mainfragments.ui.editprofile.EditProfileDialogFragment"
+        android:label="EditProfileDialogFragment" />
 </navigation>

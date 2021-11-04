@@ -61,7 +61,7 @@ class AddTournamentFragment : Fragment(R.layout.fragment_add_tournament) {
             rbPublic.isChecked = true
 
             btnSport.setOnClickListener {
-                var sport = ""
+                var sport: String
                 val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
                 builder.setTitle("Select Sport")
                 builder.setItems(
@@ -80,7 +80,7 @@ class AddTournamentFragment : Fragment(R.layout.fragment_add_tournament) {
             }
 
             btnType.setOnClickListener {
-                var type = ""
+                var type: String
                 val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
                 builder.setTitle("Select Type")
                 builder.setItems(typeOf) { dialog, position ->

@@ -8,8 +8,10 @@ import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -54,7 +56,8 @@ class MainActivity : AppCompatActivity() {
             setOf(
                 R.id.homeFragment,
                 R.id.addTournamentFragment,
-                R.id.searchTournamentFragment
+                R.id.searchTournamentFragment,
+                R.id.profileFragment
             )
         ).setOpenableLayout(drawerLayout)
             .build()
@@ -73,7 +76,8 @@ class MainActivity : AppCompatActivity() {
         userEmail.text = Firebase.auth.currentUser?.email ?: "guest@gmail.com"
         userName.text = Firebase.auth.currentUser?.displayName ?: "Guest"
         profile.setOnClickListener {
-            TODO()
+            navController.navigate(R.id.action_global_profileFragment)
+            drawerLayout.closeDrawer(GravityCompat.START)
         }
 
     }
