@@ -16,7 +16,6 @@ import com.example.tournamentmaker.R
 import com.example.tournamentmaker.adapter.MyTournamentAdapter
 import com.example.tournamentmaker.data.entity.Tournament
 import com.example.tournamentmaker.databinding.FragmentSearchTournamentBinding
-import com.example.tournamentmaker.mainactivity.mainfragments.ui.home.HomeViewModel
 import com.example.tournamentmaker.util.exhaustive
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText

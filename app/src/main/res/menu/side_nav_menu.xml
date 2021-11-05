@@ -15,6 +15,9 @@
                 android:id="@+id/addTournamentFragment"
                 android:title="Add Tournaments" />
             <item
+                android:id="@+id/joinedTournamentsFragment"
+                android:title="Joined Tournaments" />
+            <item
                 android:id="@+id/searchTournamentFragment"
                 android:title="Search Tournament" />
         </menu>

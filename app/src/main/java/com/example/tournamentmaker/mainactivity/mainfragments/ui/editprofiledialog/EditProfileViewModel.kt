@@ -1,4 +1,4 @@
-package com.example.tournamentmaker.mainactivity.mainfragments.ui.editprofile
+package com.example.tournamentmaker.mainactivity.mainfragments.ui.editprofiledialog
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tournamentmaker.R
 import com.example.tournamentmaker.adapter.MyTournamentAdapter
@@ -28,7 +29,6 @@ import kotlinx.coroutines.tasks.await
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var myTournamentAdapter: MyTournamentAdapter
-    private val viewModel: HomeViewModel by viewModels()
     private lateinit var binding: FragmentHomeBinding
     private val tournaments = FirebaseFirestore.getInstance().collection("tournaments")
 
@@ -42,49 +42,25 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         setUpRecyclerView()
 
         myTournamentAdapter.setOnTournamentClickListener {
-            Toast.makeText(requireContext(), it.id, Toast.LENGTH_SHORT).show()
+
+            findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragmentToSetupTournamentFragment(
+                    id = it.id
+                )
+            )
+
         }
 
         myTournamentAdapter.setOnDeleteClickListener {
-            showProgress(true)
-            val index = myTournamentAdapter.tournamentList.indexOf(it)
-            myTournamentAdapter.notifyItemRemoved(index)
-            viewModel.deleteTournament(it)
+            findNavController().navigate(
+                HomeFragmentDirections.actionGlobalRemoveTournamentDialogFragment(
+                    id = it.id
+                )
+            )
         }
         getUpdatedList()
 
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.homeEvent.collect { event ->
-                @Suppress("IMPLICIT_CAST_TO_ANY")
-                when (event) {
-                    is HomeViewModel.HomeEvent.NavigateBackWithResult -> {
-                        getUpdatedList()
-                        showProgress(false)
-                    }
-                    is HomeViewModel.HomeEvent.ShowErrorMessage -> {
-                        showProgress(false)
-                        getUpdatedList()
-                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
-                    }
-                }.exhaustive
-            }
-        }
-    }
 
-    private fun showProgress(bool: Boolean) {
-        binding.apply {
-            cvProgressHome.isVisible = bool
-            if (bool) {
-                parentLayoutHome.alpha = 0.5f
-                activity?.window!!.setFlags(
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-                )
-            } else {
-                parentLayoutHome.alpha = 1f
-                activity?.window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-            }
-        }
     }
 
     private fun getUpdatedList() {

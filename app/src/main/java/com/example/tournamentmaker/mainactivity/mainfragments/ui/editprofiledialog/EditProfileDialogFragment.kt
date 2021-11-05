@@ -1,4 +1,4 @@
-package com.example.tournamentmaker.mainactivity.mainfragments.ui.editprofile
+package com.example.tournamentmaker.mainactivity.mainfragments.ui.editprofiledialog
 
 import android.app.Activity
 import android.os.Bundle
