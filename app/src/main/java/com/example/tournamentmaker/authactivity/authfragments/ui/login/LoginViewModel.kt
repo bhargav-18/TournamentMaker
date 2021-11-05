@@ -36,14 +36,15 @@ class LoginViewModel constructor(
         if (password.isBlank() || email.isBlank()) {
             val error = "The field must not be empty"
             showErrorMessage(error)
+            return
         } else {
             viewModelScope.launch(Dispatchers.IO) {
                 try {
                     auth.signInWithEmailAndPassword(email, password).await()
+                    loginEventChannel.send(LoginEvent.NavigateBackWithResult(AUTH_RESULT_OK))
                 } catch (e: Exception) {
                     showErrorMessage(e.message.toString())
                 }
-                loginEventChannel.send(LoginEvent.NavigateBackWithResult(AUTH_RESULT_OK))
             }
         }
     }

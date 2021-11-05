@@ -58,6 +58,7 @@ class RegisterViewModel constructor(
 
         if (error != null) {
             showErrorMessage(error)
+            return
         } else {
             viewModelScope.launch(Dispatchers.IO) {
                 try {

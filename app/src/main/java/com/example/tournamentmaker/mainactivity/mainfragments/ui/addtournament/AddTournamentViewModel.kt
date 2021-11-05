@@ -72,11 +72,12 @@ class AddTournamentViewModel constructor(
             } else if (sport == "Other" && otherSport.isEmpty()) {
                 "The field must not be empty"
             } else if (tournamentVisibility == "Private" && tournamentPassword.isEmpty()) {
-                "The field must not be emoty"
+                "The field must not be empty"
             } else null
 
         if (error != null) {
             showErrorMessage(error)
+            return
         } else {
             viewModelScope.launch(Dispatchers.IO) {
                 val id = tournaments.document().id

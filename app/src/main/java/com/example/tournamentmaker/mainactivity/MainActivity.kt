@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration.Builder(
             setOf(
                 R.id.homeFragment,
+                R.id.joinedTournamentsFragment,
                 R.id.addTournamentFragment,
                 R.id.searchTournamentFragment,
                 R.id.profileFragment

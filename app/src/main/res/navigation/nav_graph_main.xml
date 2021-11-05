@@ -23,7 +23,11 @@
         android:id="@+id/searchTournamentFragment"
         android:name="com.example.tournamentmaker.mainactivity.mainfragments.ui.searchtournament.SearchTournamentFragment"
         android:label="Search Tournament"
-        tools:layout="@layout/fragment_search_tournament" />
+        tools:layout="@layout/fragment_search_tournament" >
+        <action
+            android:id="@+id/action_searchTournamentFragment_to_joinedTournamentsFragment"
+            app:destination="@id/joinedTournamentsFragment" />
+    </fragment>
     <dialog
         android:id="@+id/signOutDialogFragment"
         android:name="com.example.tournamentmaker.mainactivity.mainfragments.ui.signout.SignOutDialogFragment"
@@ -47,4 +51,9 @@
         android:id="@+id/editProfileDialogFragment"
         android:name="com.example.tournamentmaker.mainactivity.mainfragments.ui.editprofile.EditProfileDialogFragment"
         android:label="EditProfileDialogFragment" />
+    <fragment
+        android:id="@+id/joinedTournamentsFragment"
+        android:name="com.example.tournamentmaker.mainactivity.mainfragments.ui.joinedtournaments.JoinedTournamentsFragment"
+        android:label="Joined Tournaments"
+        tools:layout="@layout/fragment_joined_tournaments" />
 </navigation>

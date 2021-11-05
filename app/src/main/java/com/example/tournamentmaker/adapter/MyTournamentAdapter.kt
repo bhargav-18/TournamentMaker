@@ -70,13 +70,13 @@ class MyTournamentAdapter(val type: String) :
             }
             personsJoined.text =
                 "${tournament.persons.size} / ${tournament.maxPersons}"
-            if (!tournament.scheduled) {
+            if (tournament.tournamentVisibility == "Private") {
                 btnJoin.background.setTint(
                     btnJoin.context.resources.getColor(
                         R.color.red, null
                     )
                 )
-            } else if (tournament.persons.size >= tournament.maxPersons) {
+            } else if (tournament.persons.size >= tournament.maxPersons || !tournament.scheduled) {
                 btnJoin.background.setTint(
                     btnJoin.context.resources.getColor(
                         R.color.gray, null
@@ -94,16 +94,25 @@ class MyTournamentAdapter(val type: String) :
                     it(tournament)
                 }
             }
-            if (type == "search") {
-                tournamentHost.visibility = View.VISIBLE
-                personsJoined.visibility = View.VISIBLE
-                btnJoin.visibility = View.VISIBLE
-                deleteTournament.visibility = View.GONE
-            } else {
-                tournamentHost.visibility = View.GONE
-                personsJoined.visibility = View.GONE
-                btnJoin.visibility = View.GONE
-                deleteTournament.visibility = View.VISIBLE
+            when (type) {
+                "search" -> {
+                    tournamentHost.visibility = View.VISIBLE
+                    personsJoined.visibility = View.VISIBLE
+                    btnJoin.visibility = View.VISIBLE
+                    deleteTournament.visibility = View.GONE
+                }
+                "my" -> {
+                    tournamentHost.visibility = View.GONE
+                    personsJoined.visibility = View.GONE
+                    btnJoin.visibility = View.GONE
+                    deleteTournament.visibility = View.VISIBLE
+                }
+                "joined" -> {
+                    tournamentHost.visibility = View.VISIBLE
+                    personsJoined.visibility = View.VISIBLE
+                    btnJoin.visibility = View.GONE
+                    deleteTournament.visibility = View.GONE
+                }
             }
             deleteTournament.setOnClickListener {
                 onDeleteClickListener?.let {

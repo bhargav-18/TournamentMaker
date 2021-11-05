@@ -29,6 +29,7 @@ class ForgotPasswordViewModel constructor(
         if (email.isBlank()) {
             val error = "The field must not be empty"
             showErrorMessage(error)
+            return
         } else {
             viewModelScope.launch(Dispatchers.Main) {
                 try {
