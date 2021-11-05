@@ -13,9 +13,6 @@
         <action
             android:id="@+id/action_homeFragment_to_setupTournamentFragment"
             app:destination="@id/setupTournamentFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_tournamentDetailFragment"
-            app:destination="@id/tournamentDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/addTournamentFragment"
@@ -65,7 +62,11 @@
         android:id="@+id/joinedTournamentsFragment"
         android:name="com.example.tournamentmaker.mainactivity.mainfragments.ui.joinedtournaments.JoinedTournamentsFragment"
         android:label="Joined Tournaments"
-        tools:layout="@layout/fragment_joined_tournaments" />
+        tools:layout="@layout/fragment_joined_tournaments" >
+        <action
+            android:id="@+id/action_joinedTournamentsFragment_to_tournamentDetailFragment"
+            app:destination="@id/tournamentDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/setupTournamentFragment"
         android:name="com.example.tournamentmaker.mainactivity.mainfragments.ui.setuptournament.SetupTournamentFragment"
@@ -87,8 +88,8 @@
             android:id="@+id/action_setupTournamentFragment_to_tournamentAccessDetailsDialogFragment"
             app:destination="@id/tournamentAccessDetailsDialogFragment" />
         <argument
-            android:name="id"
-            app:argType="string" />
+            android:name="tournament"
+            app:argType="com.example.tournamentmaker.data.entity.Tournament" />
     </fragment>
     <fragment
         android:id="@+id/tournamentDetailFragment"
@@ -96,8 +97,8 @@
         android:label="{tournament.tournamentName}"
         tools:layout="@layout/fragment_tournament_detail">
         <argument
-            android:name="id"
-            app:argType="string" />
+            android:name="tournament"
+            app:argType="com.example.tournamentmaker.data.entity.Tournament" />
     </fragment>
     <fragment
         android:id="@+id/createMatchesFragment"

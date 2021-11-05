@@ -45,7 +45,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
             findNavController().navigate(
                 HomeFragmentDirections.actionHomeFragmentToSetupTournamentFragment(
-                    id = it.id
+                    tournament = it
                 )
             )
 

@@ -29,7 +29,8 @@ class RemoveTournamentDialogFragment : DialogFragment() {
         val dialog = AlertDialog.Builder(requireContext())
             .setTitle("Delete Tournament?")
             .setMessage("Do you want to delete tournament")
-            .setPositiveButton("Yes", null).create()
+            .setPositiveButton("Yes", null)
+            .create()
 
         dialog.setOnShowListener {
             val button = dialog.getButton(AlertDialog.BUTTON_POSITIVE)

@@ -35,7 +35,7 @@ class SetupTournamentFragment : Fragment(R.layout.fragment_setup_tournament) {
             btnRemove.setOnClickListener {
                 findNavController().navigate(
                     SetupTournamentFragmentDirections.actionGlobalRemoveTournamentDialogFragment(
-                        args.id
+                        args.tournament.id
                     )
                 )
             }
