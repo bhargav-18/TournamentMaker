@@ -8,6 +8,7 @@
     app:cardElevation="20dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/parent_list_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp">
@@ -45,18 +46,6 @@
             app:layout_constraintStart_toEndOf="@id/iv_trophy"
             app:layout_constraintTop_toBottomOf="@id/tv_tournament_name" />
 
-        <TextView
-            android:id="@+id/tv_tournament_hosts"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:text="Hosted By:"
-            android:visibility="gone"
-            app:layout_constraintEnd_toStartOf="@id/btn_join"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toEndOf="@id/iv_trophy"
-            app:layout_constraintTop_toBottomOf="@id/tv_tournament_sport" />
 
         <TextView
             android:id="@+id/tv_scheduled"
@@ -67,20 +56,8 @@
             android:text="Starting Soon"
             android:textColor="@color/red"
             app:layout_constraintStart_toEndOf="@id/iv_trophy"
-            app:layout_constraintTop_toBottomOf="@id/tv_tournament_hosts" />
+            app:layout_constraintTop_toBottomOf="@id/tv_tournament_sport" />
 
-        <TextView
-            android:id="@+id/tv_persons_joined"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="0/10"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:visibility="gone"
-            app:layout_constraintStart_toEndOf="@id/tv_scheduled"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_tournament_hosts" />
 
         <ImageView
             android:id="@+id/iv_delete"
@@ -99,20 +76,6 @@
             app:layout_constraintTop_toBottomOf="@id/tv_tournament_sport"
             app:tint="@color/red" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_join"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/button_background"
-            android:text="Join"
-            android:visibility="gone"
-            app:backgroundTint="@color/red"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

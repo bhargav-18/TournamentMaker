@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_searchTournamentFragment_to_joinedTournamentsFragment"
             app:destination="@id/joinedTournamentsFragment" />
+        <action
+            android:id="@+id/action_searchTournamentFragment_to_tournamentDetailFragment"
+            app:destination="@id/tournamentDetailFragment" />
     </fragment>
     <dialog
         android:id="@+id/signOutDialogFragment"
@@ -70,7 +73,7 @@
     <fragment
         android:id="@+id/setupTournamentFragment"
         android:name="com.example.tournamentmaker.mainactivity.mainfragments.ui.setuptournament.SetupTournamentFragment"
-        android:label="{tournament.tournamentName}"
+        android:label="{title}"
         tools:layout="@layout/fragment_setup_tournament">
         <action
             android:id="@+id/action_setupTournamentFragment_to_createMatchesFragment"
@@ -88,17 +91,23 @@
             android:id="@+id/action_setupTournamentFragment_to_tournamentAccessDetailsDialogFragment"
             app:destination="@id/tournamentAccessDetailsDialogFragment" />
         <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
             android:name="tournament"
             app:argType="com.example.tournamentmaker.data.entity.Tournament" />
     </fragment>
     <fragment
         android:id="@+id/tournamentDetailFragment"
         android:name="com.example.tournamentmaker.mainactivity.mainfragments.ui.tournamentdetail.TournamentDetailFragment"
-        android:label="{tournament.tournamentName}"
+        android:label="{title}"
         tools:layout="@layout/fragment_tournament_detail">
         <argument
             android:name="tournament"
             app:argType="com.example.tournamentmaker.data.entity.Tournament" />
+        <argument
+            android:name="title"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/createMatchesFragment"

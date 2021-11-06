@@ -57,8 +57,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.homeFragment,
                 R.id.joinedTournamentsFragment,
                 R.id.addTournamentFragment,
-                R.id.searchTournamentFragment,
-                R.id.profileFragment
+                R.id.searchTournamentFragment
             )
         ).setOpenableLayout(drawerLayout)
             .build()
@@ -84,11 +83,52 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        var a = true
+
         if (toggle.onOptionsItemSelected(item)) {
-            return true
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+
+                when (destination.id) {
+                    R.id.tournamentDetailFragment -> {
+                        a = false
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                    }
+
+                    R.id.setupTournamentFragment -> {
+                        a = false
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                    }
+
+                    R.id.profileFragment -> {
+                        a = false
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                    }
+
+                    R.id.manageParticipantsFragment -> {
+                        a = false
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                    }
+
+                    R.id.createMatchesFragment -> {
+                        a = false
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                    }
+
+                    R.id.resultsFragment -> {
+                        a = false
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                    }
+
+                    R.id.standingsFragment -> {
+                        a = false
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                    }
+                }
+            }
         }
 
-        return super.onOptionsItemSelected(item)
+        return a
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -4,46 +4,52 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tournamentmaker.data.entity.Tournament
-import com.example.tournamentmaker.databinding.ListItemsMyTournamentsBinding
+import com.example.tournamentmaker.data.entity.User
+import com.example.tournamentmaker.databinding.ListItemsJoinedTournamentsBinding
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
-class MyTournamentAdapter() :
-    RecyclerView.Adapter<MyTournamentAdapter.MyTournamentViewHolder>() {
+class JoinedTournamentAdapter() :
+    RecyclerView.Adapter<JoinedTournamentAdapter.JoinedTournamentViewHolder>() {
 
-    inner class MyTournamentViewHolder(binding: ListItemsMyTournamentsBinding) :
+    private val users = FirebaseFirestore.getInstance().collection("users")
+
+    inner class JoinedTournamentViewHolder(binding: ListItemsJoinedTournamentsBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val tournamentName: TextView = binding.tvTournamentName
         val tournamentSport: TextView = binding.tvTournamentSport
         val tournamentScheduled: TextView = binding.tvScheduled
-        val deleteTournament: ImageView = binding.ivDelete
-        val parentLayout: ConstraintLayout = binding.parentListLayout
+        val tournamentHost: TextView = binding.tvTournamentHosts
+        val personsJoined: TextView = binding.tvPersonsJoined
     }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): MyTournamentViewHolder {
-        val binding = ListItemsMyTournamentsBinding.inflate(
+    ): JoinedTournamentViewHolder {
+        val binding = ListItemsJoinedTournamentsBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
 
-        return MyTournamentViewHolder(binding)
+        return JoinedTournamentViewHolder(binding)
     }
 
 
     @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(
-        holder: MyTournamentViewHolder,
+        holder: JoinedTournamentViewHolder,
         position: Int
     ) {
         val tournament: Tournament = tournamentList[position]
@@ -51,13 +57,15 @@ class MyTournamentAdapter() :
             tournamentName.text = tournament.tournamentName
             tournamentSport.text = tournament.tournamentSport
             tournamentScheduled.text = if (tournament.scheduled) "Scheduled" else "Starting Soon"
-
-            deleteTournament.setOnClickListener {
-                onDeleteClickListener?.let {
-                    it(tournament)
-                }
+            CoroutineScope(Dispatchers.Main).launch {
+                val user = users.whereEqualTo("uid", tournament.host).get().await()
+                    .toObjects(User::class.java)
+                tournamentHost.text = "Hosted by:\n" + user[0].userName
             }
-            parentLayout.setOnClickListener {
+            personsJoined.text =
+                "${tournament.persons.size} / ${tournament.maxPersons}"
+
+            itemView.setOnClickListener {
                 onTournamentClickListener?.let {
                     it(tournament)
                 }
@@ -88,11 +96,5 @@ class MyTournamentAdapter() :
 
     fun setOnTournamentClickListener(listener: (Tournament) -> Unit) {
         onTournamentClickListener = listener
-    }
-
-    private var onDeleteClickListener: ((Tournament) -> Unit)? = null
-
-    fun setOnDeleteClickListener(listener: (Tournament) -> Unit) {
-        onDeleteClickListener = listener
     }
 }

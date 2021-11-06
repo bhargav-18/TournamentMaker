@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tournamentmaker.R
 import com.example.tournamentmaker.adapter.MyTournamentAdapter
+import com.example.tournamentmaker.adapter.SearchTournamentAdapter
 import com.example.tournamentmaker.data.entity.Tournament
 import com.example.tournamentmaker.databinding.FragmentSearchTournamentBinding
 import com.example.tournamentmaker.util.exhaustive
@@ -30,7 +31,7 @@ import kotlinx.coroutines.tasks.await
 
 class SearchTournamentFragment : Fragment(R.layout.fragment_search_tournament) {
 
-    private lateinit var myTournamentAdapter: MyTournamentAdapter
+    private lateinit var searchTournamentAdapter: SearchTournamentAdapter
     private val viewModel: SearchTournamentViewModel by viewModels()
     private lateinit var binding: FragmentSearchTournamentBinding
     private val tournaments = FirebaseFirestore.getInstance().collection("tournaments")
@@ -40,15 +41,20 @@ class SearchTournamentFragment : Fragment(R.layout.fragment_search_tournament) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentSearchTournamentBinding.bind(view)
-        myTournamentAdapter = MyTournamentAdapter("search")
+        searchTournamentAdapter = SearchTournamentAdapter()
 
         setUpRecyclerView()
 
-        myTournamentAdapter.setOnTournamentClickListener {
-            Toast.makeText(context, it.id, Toast.LENGTH_SHORT).show()
+        searchTournamentAdapter.setOnTournamentClickListener {
+            findNavController().navigate(
+                SearchTournamentFragmentDirections.actionSearchTournamentFragmentToTournamentDetailFragment(
+                    tournament = it,
+                    title = it.tournamentName
+                )
+            )
         }
 
-        myTournamentAdapter.setOnJoinClickListener { tournament ->
+        searchTournamentAdapter.setOnJoinClickListener { tournament ->
 
             if (!tournament.scheduled) {
                 Toast.makeText(
@@ -130,7 +136,7 @@ class SearchTournamentFragment : Fragment(R.layout.fragment_search_tournament) {
                 val tournamentList =
                     tournaments.whereNotIn("host", arrayListOf(Firebase.auth.currentUser!!.uid))
                         .get().await().toObjects(Tournament::class.java)
-                myTournamentAdapter.tournamentList = tournamentList
+                searchTournamentAdapter.tournamentList = tournamentList
             } catch (e: Exception) {
                 Snackbar.make(requireView(), e.message.toString(), Snackbar.LENGTH_LONG).show()
             }
@@ -141,7 +147,7 @@ class SearchTournamentFragment : Fragment(R.layout.fragment_search_tournament) {
     private fun setUpRecyclerView() {
         binding.rvTournamentSearchList.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = myTournamentAdapter
+            adapter = searchTournamentAdapter
             itemAnimator = null
         }
     }

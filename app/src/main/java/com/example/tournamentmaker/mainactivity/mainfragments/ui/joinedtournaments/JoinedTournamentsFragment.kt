@@ -7,8 +7,10 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tournamentmaker.R
+import com.example.tournamentmaker.adapter.JoinedTournamentAdapter
 import com.example.tournamentmaker.adapter.MyTournamentAdapter
 import com.example.tournamentmaker.data.entity.Tournament
 import com.example.tournamentmaker.databinding.FragmentJoinedTournamentsBinding
@@ -23,8 +25,7 @@ import kotlinx.coroutines.tasks.await
 
 class JoinedTournamentsFragment : Fragment(R.layout.fragment_joined_tournaments) {
 
-    private lateinit var myTournamentAdapter: MyTournamentAdapter
-    private val viewModel: JoinedTournamentsViewModel by viewModels()
+    private lateinit var joinedTournamentAdapter: JoinedTournamentAdapter
     private lateinit var binding: FragmentJoinedTournamentsBinding
     private val tournaments = FirebaseFirestore.getInstance().collection("tournaments")
 
@@ -33,32 +34,21 @@ class JoinedTournamentsFragment : Fragment(R.layout.fragment_joined_tournaments)
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentJoinedTournamentsBinding.bind(view)
-        myTournamentAdapter = MyTournamentAdapter("joined")
+        joinedTournamentAdapter = JoinedTournamentAdapter()
 
         setUpRecyclerView()
 
-        myTournamentAdapter.setOnTournamentClickListener {
-            Toast.makeText(requireContext(), it.id, Toast.LENGTH_SHORT).show()
+        joinedTournamentAdapter.setOnTournamentClickListener {
+            findNavController().navigate(
+                JoinedTournamentsFragmentDirections.actionJoinedTournamentsFragmentToTournamentDetailFragment(
+                    tournament = it,
+                    title = it.tournamentName
+                )
+            )
         }
 
         getUpdatedList()
 
-//        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-//            viewModel.homeEvent.collect { event ->
-//                @Suppress("IMPLICIT_CAST_TO_ANY")
-//                when (event) {
-//                    is HomeViewModel.HomeEvent.NavigateBackWithResult -> {
-//                        getUpdatedList()
-//                        showProgress(false)
-//                    }
-//                    is HomeViewModel.HomeEvent.ShowErrorMessage -> {
-//                        showProgress(false)
-//                        getUpdatedList()
-//                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
-//                    }
-//                }.exhaustive
-//            }
-//        }
     }
 
     private fun showProgress(bool: Boolean) {
@@ -83,7 +73,7 @@ class JoinedTournamentsFragment : Fragment(R.layout.fragment_joined_tournaments)
                 val tournamentList =
                     tournaments.whereArrayContains("persons", Firebase.auth.currentUser!!.uid).get()
                         .await().toObjects(Tournament::class.java)
-                myTournamentAdapter.tournamentList = tournamentList
+                joinedTournamentAdapter.tournamentList = tournamentList
             } catch (e: Exception) {
                 Snackbar.make(requireView(), e.message.toString(), Snackbar.LENGTH_LONG).show()
             }
@@ -93,7 +83,7 @@ class JoinedTournamentsFragment : Fragment(R.layout.fragment_joined_tournaments)
     private fun setUpRecyclerView() {
         binding.rvJoinedTournamentsList.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = myTournamentAdapter
+            adapter = joinedTournamentAdapter
             itemAnimator = null
         }
     }

@@ -4,33 +4,42 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.tournamentmaker.R
 import com.example.tournamentmaker.data.entity.Tournament
-import com.example.tournamentmaker.databinding.ListItemsMyTournamentsBinding
+import com.example.tournamentmaker.data.entity.User
+import com.example.tournamentmaker.databinding.ListItemsSearchTournamentsBinding
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
-class MyTournamentAdapter() :
-    RecyclerView.Adapter<MyTournamentAdapter.MyTournamentViewHolder>() {
+class SearchTournamentAdapter() :
+    RecyclerView.Adapter<SearchTournamentAdapter.MyTournamentViewHolder>() {
 
-    inner class MyTournamentViewHolder(binding: ListItemsMyTournamentsBinding) :
+    private val users = FirebaseFirestore.getInstance().collection("users")
+
+    inner class MyTournamentViewHolder(binding: ListItemsSearchTournamentsBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val tournamentName: TextView = binding.tvTournamentName
         val tournamentSport: TextView = binding.tvTournamentSport
         val tournamentScheduled: TextView = binding.tvScheduled
-        val deleteTournament: ImageView = binding.ivDelete
-        val parentLayout: ConstraintLayout = binding.parentListLayout
+        val tournamentHost: TextView = binding.tvTournamentHosts
+        val personsJoined: TextView = binding.tvPersonsJoined
+        val btnJoin: AppCompatButton = binding.btnJoin
     }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): MyTournamentViewHolder {
-        val binding = ListItemsMyTournamentsBinding.inflate(
+        val binding = ListItemsSearchTournamentsBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -51,13 +60,39 @@ class MyTournamentAdapter() :
             tournamentName.text = tournament.tournamentName
             tournamentSport.text = tournament.tournamentSport
             tournamentScheduled.text = if (tournament.scheduled) "Scheduled" else "Starting Soon"
-
-            deleteTournament.setOnClickListener {
-                onDeleteClickListener?.let {
+            CoroutineScope(Dispatchers.Main).launch {
+                val user = users.whereEqualTo("uid", tournament.host).get().await()
+                    .toObjects(User::class.java)
+                tournamentHost.text = "Hosted by:\n" + user[0].userName
+            }
+            personsJoined.text =
+                "${tournament.persons.size} / ${tournament.maxPersons}"
+            if (tournament.tournamentVisibility == "Private") {
+                btnJoin.background.setTint(
+                    btnJoin.context.resources.getColor(
+                        R.color.red, null
+                    )
+                )
+            } else if (tournament.persons.size >= tournament.maxPersons || !tournament.scheduled) {
+                btnJoin.background.setTint(
+                    btnJoin.context.resources.getColor(
+                        R.color.gray, null
+                    )
+                )
+            } else {
+                btnJoin.background.setTint(
+                    btnJoin.context.resources.getColor(
+                        R.color.green, null
+                    )
+                )
+            }
+            btnJoin.setOnClickListener {
+                onJoinClickListener?.let {
                     it(tournament)
                 }
             }
-            parentLayout.setOnClickListener {
+
+            itemView.setOnClickListener {
                 onTournamentClickListener?.let {
                     it(tournament)
                 }
@@ -90,9 +125,9 @@ class MyTournamentAdapter() :
         onTournamentClickListener = listener
     }
 
-    private var onDeleteClickListener: ((Tournament) -> Unit)? = null
+    private var onJoinClickListener: ((Tournament) -> Unit)? = null
 
-    fun setOnDeleteClickListener(listener: (Tournament) -> Unit) {
-        onDeleteClickListener = listener
+    fun setOnJoinClickListener(listener: (Tournament) -> Unit) {
+        onJoinClickListener = listener
     }
 }
