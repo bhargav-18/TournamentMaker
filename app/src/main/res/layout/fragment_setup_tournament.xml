@@ -56,7 +56,7 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/btn_create_matches" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -74,7 +74,7 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/btn_results" />
 
     <androidx.appcompat.widget.AppCompatButton

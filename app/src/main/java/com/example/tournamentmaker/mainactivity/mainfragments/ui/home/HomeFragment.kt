@@ -51,7 +51,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         myTournamentAdapter.setOnDeleteClickListener {
             findNavController().navigate(
                 HomeFragmentDirections.actionGlobalRemoveTournamentDialogFragment(
-                    id = it.id
+                    tournament = it
                 )
             )
         }

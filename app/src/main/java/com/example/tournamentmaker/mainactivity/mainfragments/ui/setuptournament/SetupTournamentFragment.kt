@@ -3,13 +3,10 @@ package com.example.tournamentmaker.mainactivity.mainfragments.ui.setuptournamen
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.tournamentmaker.R
-import com.example.tournamentmaker.databinding.FragmentSearchTournamentBinding
 import com.example.tournamentmaker.databinding.FragmentSetupTournamentBinding
-import com.example.tournamentmaker.mainactivity.mainfragments.ui.searchtournament.SearchTournamentViewModel
 
 class SetupTournamentFragment : Fragment(R.layout.fragment_setup_tournament) {
 
@@ -24,6 +21,14 @@ class SetupTournamentFragment : Fragment(R.layout.fragment_setup_tournament) {
 
         binding.apply {
 
+            if (args.tournament.scheduled) {
+                btnResults.visibility = View.VISIBLE
+                btnStandings.visibility = View.VISIBLE
+            } else {
+                btnResults.visibility = View.GONE
+                btnStandings.visibility = View.GONE
+            }
+
             btnCreateMatches.setOnClickListener {
                 findNavController().navigate(SetupTournamentFragmentDirections.actionSetupTournamentFragmentToCreateMatchesFragment())
             }
@@ -35,7 +40,7 @@ class SetupTournamentFragment : Fragment(R.layout.fragment_setup_tournament) {
             btnRemove.setOnClickListener {
                 findNavController().navigate(
                     SetupTournamentFragmentDirections.actionGlobalRemoveTournamentDialogFragment(
-                        args.tournament.id
+                        tournament = args.tournament
                     )
                 )
             }
@@ -49,7 +54,11 @@ class SetupTournamentFragment : Fragment(R.layout.fragment_setup_tournament) {
             }
 
             btnTournamentAccess.setOnClickListener {
-                findNavController().navigate(SetupTournamentFragmentDirections.actionSetupTournamentFragmentToTournamentAccessDetailsDialogFragment())
+                findNavController().navigate(
+                    SetupTournamentFragmentDirections.actionSetupTournamentFragmentToTournamentAccessDetailsDialogFragment(
+                        tournament = args.tournament
+                    )
+                )
             }
 
         }
