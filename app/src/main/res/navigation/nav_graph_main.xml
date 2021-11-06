@@ -118,7 +118,11 @@
         android:id="@+id/manageParticipantsFragment"
         android:name="com.example.tournamentmaker.mainactivity.mainfragments.ui.manageparticipants.ManageParticipantsFragment"
         android:label="Manage Participants"
-        tools:layout="@layout/fragment_manage_participants" />
+        tools:layout="@layout/fragment_manage_participants">
+        <argument
+            android:name="tournament"
+            app:argType="com.example.tournamentmaker.data.entity.Tournament" />
+    </fragment>
     <dialog
         android:id="@+id/removeTournamentDialogFragment"
         android:name="com.example.tournamentmaker.mainactivity.mainfragments.ui.removetournamentdialog.RemoveTournamentDialogFragment"
@@ -128,9 +132,9 @@
             app:destination="@id/homeFragment" />
         <argument
             android:name="tournament"
+            android:defaultValue="@null"
             app:argType="com.example.tournamentmaker.data.entity.Tournament"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
     </dialog>
     <fragment
         android:id="@+id/resultsFragment"
@@ -146,12 +150,12 @@
         android:id="@+id/tournamentAccessDetailsDialogFragment"
         android:name="com.example.tournamentmaker.mainactivity.mainfragments.ui.tournamentaccessdetailsdialog.TournamentAccessDetailsDialogFragment"
         android:label="tournament_access_details_dialog"
-        tools:layout="@layout/tournament_access_details_dialog" >
+        tools:layout="@layout/tournament_access_details_dialog">
         <argument
             android:name="tournament"
+            android:defaultValue="@null"
             app:argType="com.example.tournamentmaker.data.entity.Tournament"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
     </dialog>
     <action
         android:id="@+id/action_global_removeTournamentDialogFragment"

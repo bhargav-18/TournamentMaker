@@ -16,6 +16,6 @@ data class Tournament(
     val tournamentAccessPassword: String = "",
     val scheduled: Boolean = false,
     val maxPersons: Int = 0,
-    val persons: ArrayList<String?> = arrayListOf(),
+    val persons: ArrayList<String> = arrayListOf(),
     val host: String = ""
 ) : Parcelable

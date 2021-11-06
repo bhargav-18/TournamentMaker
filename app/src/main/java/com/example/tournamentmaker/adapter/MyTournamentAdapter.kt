@@ -23,7 +23,6 @@ class MyTournamentAdapter() :
         val tournamentSport: TextView = binding.tvTournamentSport
         val tournamentScheduled: TextView = binding.tvScheduled
         val deleteTournament: ImageView = binding.ivDelete
-        val parentLayout: ConstraintLayout = binding.parentListLayout
     }
 
     override fun onCreateViewHolder(
@@ -57,7 +56,7 @@ class MyTournamentAdapter() :
                     it(tournament)
                 }
             }
-            parentLayout.setOnClickListener {
+            itemView.setOnClickListener {
                 onTournamentClickListener?.let {
                     it(tournament)
                 }

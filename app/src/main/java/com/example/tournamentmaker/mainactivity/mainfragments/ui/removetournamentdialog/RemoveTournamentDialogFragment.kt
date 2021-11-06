@@ -54,6 +54,14 @@ class RemoveTournamentDialogFragment : DialogFragment(R.layout.remove_tournament
                                     FieldValue.arrayRemove(tournament.id)
                                 )
                                 .await()
+
+                            for (user in tournament.persons) {
+                                users.document(user).update(
+                                    "tournamentsJoined",
+                                    FieldValue.arrayRemove(tournament.id)
+                                )
+                            }
+
                             tournaments.document(tournament.id).delete().await()
                             findNavController().navigate(RemoveTournamentDialogFragmentDirections.actionRemoveTournamentDialogFragmentToHomeFragment())
 

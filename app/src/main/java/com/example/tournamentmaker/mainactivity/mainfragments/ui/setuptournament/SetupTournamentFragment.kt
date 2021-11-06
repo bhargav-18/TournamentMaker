@@ -34,7 +34,11 @@ class SetupTournamentFragment : Fragment(R.layout.fragment_setup_tournament) {
             }
 
             btnManageParticipants.setOnClickListener {
-                findNavController().navigate(SetupTournamentFragmentDirections.actionSetupTournamentFragmentToManageParticipantsFragment())
+                findNavController().navigate(
+                    SetupTournamentFragmentDirections.actionSetupTournamentFragmentToManageParticipantsFragment(
+                        tournament = args.tournament
+                    )
+                )
             }
 
             btnRemove.setOnClickListener {
