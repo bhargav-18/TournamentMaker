@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.view.WindowManager
 import android.widget.TableRow
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -59,6 +61,8 @@ class CreateMatchesFragment : Fragment(R.layout.fragment_create_matches) {
 
     @SuppressLint("SetTextI18n")
     private fun listMatches(ListTeam: ArrayList<String>, ListID: ArrayList<String>) {
+
+        showProgress(true)
 
         val matchesArray: ArrayList<Map<String, Map<String, Map<String, String>>>> = arrayListOf()
 
@@ -192,6 +196,24 @@ class CreateMatchesFragment : Fragment(R.layout.fragment_create_matches) {
             tournaments.document(tournament.id).update("matches", matchesArray).await()
         }
 
+        showProgress(false)
+
+    }
+
+    private fun showProgress(bool: Boolean) {
+        binding.apply {
+            cvProgressCreateMatches.isVisible = bool
+            if (bool) {
+                parentLayoutCreateMatches.alpha = 0.5f
+                activity?.window!!.setFlags(
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                )
+            } else {
+                parentLayoutCreateMatches.alpha = 1f
+                activity?.window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            }
+        }
     }
 
 }

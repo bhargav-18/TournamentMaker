@@ -126,10 +126,6 @@ class MainActivity : AppCompatActivity() {
                         drawerLayout.closeDrawer(GravityCompat.START)
                     }
 
-                    R.id.participantsFragment -> {
-                        a = false
-                        drawerLayout.closeDrawer(GravityCompat.START)
-                    }
                 }
             }
         }

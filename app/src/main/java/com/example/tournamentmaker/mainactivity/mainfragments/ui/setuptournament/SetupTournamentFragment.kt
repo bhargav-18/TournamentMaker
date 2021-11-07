@@ -2,14 +2,18 @@ package com.example.tournamentmaker.mainactivity.mainfragments.ui.setuptournamen
 
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.tournamentmaker.R
 import com.example.tournamentmaker.data.entity.Tournament
 import com.example.tournamentmaker.databinding.FragmentSetupTournamentBinding
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,27 +32,35 @@ class SetupTournamentFragment : Fragment(R.layout.fragment_setup_tournament) {
 
         binding = FragmentSetupTournamentBinding.bind(view)
 
+
         binding.apply {
 
+
             CoroutineScope(Dispatchers.Main).launch {
+
+                showProgress(true)
+
                 tournament =
                     tournaments.document(args.id).get().await().toObject(Tournament::class.java)!!
 
+                if (tournament.host != Firebase.auth.currentUser!!.uid) {
+                    btnTournamentAccess.visibility = View.GONE
+                    btnRemove.visibility = View.GONE
+                }
                 if (tournament.matches.size > 0) {
                     btnResults.visibility = View.VISIBLE
                     btnStandings.visibility = View.VISIBLE
                     btnCreateMatches.visibility = View.GONE
-                    btnParticipants.visibility = View.VISIBLE
+                    btnManageParticipants.text = "Participants"
                     btnMatches.visibility = View.VISIBLE
-                    btnManageParticipants.visibility = View.GONE
                 } else {
                     btnResults.visibility = View.GONE
                     btnStandings.visibility = View.GONE
                     btnCreateMatches.visibility = View.VISIBLE
-                    btnParticipants.visibility = View.GONE
                     btnMatches.visibility = View.GONE
-                    btnManageParticipants.visibility = View.VISIBLE
                 }
+
+                showProgress(false)
             }
 
             btnCreateMatches.setOnClickListener {
@@ -74,14 +86,6 @@ class SetupTournamentFragment : Fragment(R.layout.fragment_setup_tournament) {
             btnManageParticipants.setOnClickListener {
                 findNavController().navigate(
                     SetupTournamentFragmentDirections.actionSetupTournamentFragmentToManageParticipantsFragment(
-                        id = tournament.id
-                    )
-                )
-            }
-
-            btnParticipants.setOnClickListener {
-                findNavController().navigate(
-                    SetupTournamentFragmentDirections.actionSetupTournamentFragmentToParticipantsFragment(
                         id = tournament.id
                     )
                 )
@@ -122,4 +126,21 @@ class SetupTournamentFragment : Fragment(R.layout.fragment_setup_tournament) {
 
         }
     }
+
+    private fun showProgress(bool: Boolean) {
+        binding.apply {
+            cvProgressSetup.isVisible = bool
+            if (bool) {
+                parentLayoutSetup.alpha = 0.5f
+                activity?.window!!.setFlags(
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                )
+            } else {
+                parentLayoutSetup.alpha = 1f
+                activity?.window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            }
+        }
+    }
+
 }

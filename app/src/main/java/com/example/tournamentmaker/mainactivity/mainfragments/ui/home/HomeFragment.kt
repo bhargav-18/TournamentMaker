@@ -76,8 +76,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun getUpdatedList() {
-        showProgress(true)
+
         CoroutineScope(Dispatchers.Main).launch {
+
+            showProgress(true)
+
             try {
                 val tournamentList =
                     tournaments.whereEqualTo("host", Firebase.auth.currentUser!!.uid).get()
@@ -87,8 +90,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             } catch (e: Exception) {
                 Snackbar.make(requireView(), e.message.toString(), Snackbar.LENGTH_LONG).show()
             }
+
+            showProgress(false)
+
         }
-        showProgress(false)
     }
 
     private fun setUpRecyclerView() {

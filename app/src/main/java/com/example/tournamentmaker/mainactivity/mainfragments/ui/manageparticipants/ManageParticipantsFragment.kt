@@ -32,7 +32,7 @@ class ManageParticipantsFragment : Fragment(R.layout.fragment_manage_participant
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentManageParticipantsBinding.bind(view)
-        participantsAdapter = ParticipantsAdapter("manageParticipant")
+        participantsAdapter = ParticipantsAdapter(args.id)
 
         getUpdatedList()
 
@@ -45,6 +45,9 @@ class ManageParticipantsFragment : Fragment(R.layout.fragment_manage_participant
         participantsAdapter.setOnRemoveClickListener {
 
             CoroutineScope(Dispatchers.IO).launch {
+
+                showProgress(true)
+
                 try {
                     tournaments.document(args.id)
                         .update("persons", FieldValue.arrayRemove(it)).await()
@@ -56,6 +59,9 @@ class ManageParticipantsFragment : Fragment(R.layout.fragment_manage_participant
                 } catch (e: Exception) {
                     Toast.makeText(context, e.message.toString(), Toast.LENGTH_SHORT).show()
                 }
+
+                showProgress(false)
+
             }
 
             getUpdatedList()
@@ -67,13 +73,33 @@ class ManageParticipantsFragment : Fragment(R.layout.fragment_manage_participant
     private fun getUpdatedList() {
 
         CoroutineScope(Dispatchers.Main).launch {
+            showProgress(true)
+
             val tournament =
                 tournaments.document(args.id).get().await()
                     .toObject(Tournament::class.java)
             val personsList = tournament!!.persons as List<String>
             participantsAdapter.personList = personsList
+
+            showProgress(false)
         }
 
+    }
+
+    private fun showProgress(bool: Boolean) {
+        binding.apply {
+            cvProgressParticipants.isVisible = bool
+            if (bool) {
+                parentLayoutParticipants.alpha = 0.5f
+                activity?.window!!.setFlags(
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                )
+            } else {
+                parentLayoutParticipants.alpha = 1f
+                activity?.window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            }
+        }
     }
 
     private fun setUpRecyclerView() {

@@ -144,8 +144,11 @@ class SearchTournamentFragment : Fragment(R.layout.fragment_search_tournament) {
     }
 
     private fun getUpdatedList() {
-        showProgress(true)
+
         CoroutineScope(Dispatchers.Main).launch {
+
+            showProgress(true)
+
             try {
                 val tournamentList =
                     tournaments.whereNotIn("host", arrayListOf(Firebase.auth.currentUser!!.uid))
@@ -154,8 +157,10 @@ class SearchTournamentFragment : Fragment(R.layout.fragment_search_tournament) {
             } catch (e: Exception) {
                 Snackbar.make(requireView(), e.message.toString(), Snackbar.LENGTH_LONG).show()
             }
+
+            showProgress(false)
+
         }
-        showProgress(false)
     }
 
     private fun setUpRecyclerView() {

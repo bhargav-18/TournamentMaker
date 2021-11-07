@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.tournamentmaker.data.entity.Tournament
 import com.example.tournamentmaker.data.entity.User
 import com.example.tournamentmaker.databinding.ListItemsParticipantsBinding
 import com.google.firebase.firestore.FirebaseFirestore
@@ -17,10 +18,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-class ParticipantsAdapter(val type: String) :
+class ParticipantsAdapter(val id: String) :
     RecyclerView.Adapter<ParticipantsAdapter.ParticipantViewHolder>() {
 
     private val users = FirebaseFirestore.getInstance().collection("users")
+    private val tournaments = FirebaseFirestore.getInstance().collection("tournaments")
+    private lateinit var tournament: Tournament
 
     inner class ParticipantViewHolder(binding: ListItemsParticipantsBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -54,18 +57,21 @@ class ParticipantsAdapter(val type: String) :
             CoroutineScope(Dispatchers.Main).launch {
                 val user = users.document(person).get().await().toObject(User::class.java)
                 tvPersons.text = user?.userName
+
+                tournament =
+                    tournaments.document(id).get().await().toObject(Tournament::class.java)!!
+
+                if (tournament.matches.size > 0) {
+                    removeParticipant.visibility = View.GONE
+                } else {
+                    removeParticipant.visibility = View.VISIBLE
+                }
             }
 
             removeParticipant.setOnClickListener {
                 onRemoveClickListener?.let {
                     it(person)
                 }
-            }
-
-            if (type == "participant") {
-                removeParticipant.visibility = View.GONE
-            } else {
-                removeParticipant.visibility = View.VISIBLE
             }
 
             itemView.setOnClickListener {

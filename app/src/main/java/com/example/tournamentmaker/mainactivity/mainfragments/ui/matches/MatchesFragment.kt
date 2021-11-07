@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.view.WindowManager
 import android.widget.TableRow
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
@@ -15,6 +17,7 @@ import com.example.tournamentmaker.R
 import com.example.tournamentmaker.data.entity.Tournament
 import com.example.tournamentmaker.data.entity.User
 import com.example.tournamentmaker.databinding.FragmentCreateMatchesBinding
+import com.example.tournamentmaker.databinding.FragmentMatchesBinding
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
@@ -26,7 +29,7 @@ import kotlinx.coroutines.tasks.await
 class MatchesFragment : Fragment(R.layout.fragment_matches) {
 
     private val args: MatchesFragmentArgs by navArgs()
-    private lateinit var binding: FragmentCreateMatchesBinding
+    private lateinit var binding: FragmentMatchesBinding
     private val tournaments = FirebaseFirestore.getInstance().collection("tournaments")
     private val users = FirebaseFirestore.getInstance().collection("users")
     private lateinit var tournament: Tournament
@@ -34,10 +37,13 @@ class MatchesFragment : Fragment(R.layout.fragment_matches) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentCreateMatchesBinding.bind(view)
+        binding = FragmentMatchesBinding.bind(view)
 
         val id = args.id
         CoroutineScope(Dispatchers.Main).launch {
+
+            showProgress(true)
+
             tournament = tournaments.document(id).get().await().toObject(Tournament::class.java)!!
             val persons = tournament.persons
 
@@ -52,12 +58,16 @@ class MatchesFragment : Fragment(R.layout.fragment_matches) {
 
             listMatches(list)
 
+            showProgress(false)
+
         }
 
     }
 
     @SuppressLint("SetTextI18n")
     private fun listMatches(ListTeam: ArrayList<String>) {
+
+        showProgress(true)
 
         val numTeams = ListTeam.size
         if (ListTeam.size % 2 != 0) {
@@ -170,6 +180,23 @@ class MatchesFragment : Fragment(R.layout.fragment_matches) {
 
                 rowMatches.addView(matches)
                 binding.tlMatches.addView(rowMatches)
+            }
+        }
+        showProgress(false)
+    }
+
+    private fun showProgress(bool: Boolean) {
+        binding.apply {
+            cvProgressMatches.isVisible = bool
+            if (bool) {
+                parentLayoutMatches.alpha = 0.5f
+                activity?.window!!.setFlags(
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                )
+            } else {
+                parentLayoutMatches.alpha = 1f
+                activity?.window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             }
         }
     }

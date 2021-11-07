@@ -3,15 +3,12 @@ package com.example.tournamentmaker.mainactivity.mainfragments.ui.joinedtourname
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tournamentmaker.R
 import com.example.tournamentmaker.adapter.JoinedTournamentAdapter
-import com.example.tournamentmaker.adapter.MyTournamentAdapter
 import com.example.tournamentmaker.data.entity.Tournament
 import com.example.tournamentmaker.databinding.FragmentJoinedTournamentsBinding
 import com.google.android.material.snackbar.Snackbar
@@ -69,6 +66,9 @@ class JoinedTournamentsFragment : Fragment(R.layout.fragment_joined_tournaments)
 
     private fun getUpdatedList() {
         CoroutineScope(Dispatchers.Main).launch {
+
+            showProgress(true)
+
             try {
                 val tournamentList =
                     tournaments.whereArrayContains("persons", Firebase.auth.currentUser!!.uid).get()
@@ -77,6 +77,9 @@ class JoinedTournamentsFragment : Fragment(R.layout.fragment_joined_tournaments)
             } catch (e: Exception) {
                 Snackbar.make(requireView(), e.message.toString(), Snackbar.LENGTH_LONG).show()
             }
+
+            showProgress(false)
+
         }
     }
 

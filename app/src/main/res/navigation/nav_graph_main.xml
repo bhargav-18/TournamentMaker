@@ -101,9 +101,6 @@
         <action
             android:id="@+id/action_setupTournamentFragment_to_matchesFragment"
             app:destination="@id/matchesFragment" />
-        <action
-            android:id="@+id/action_setupTournamentFragment_to_participantsFragment"
-            app:destination="@id/participantsFragment" />
     </fragment>
     <fragment
         android:id="@+id/createMatchesFragment"
@@ -167,15 +164,6 @@
         <argument
             android:name="title"
             app:argType="string" />
-        <argument
-            android:name="id"
-            app:argType="string" />
-    </fragment>
-    <fragment
-        android:id="@+id/participantsFragment"
-        android:name="com.example.tournamentmaker.mainactivity.mainfragments.ui.participants.ParticipantsFragment"
-        android:label="Participants"
-        tools:layout="@layout/fragment_participants">
         <argument
             android:name="id"
             app:argType="string" />
