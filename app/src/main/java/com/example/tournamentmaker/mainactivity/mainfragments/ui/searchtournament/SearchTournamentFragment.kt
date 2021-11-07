@@ -47,8 +47,8 @@ class SearchTournamentFragment : Fragment(R.layout.fragment_search_tournament) {
 
         searchTournamentAdapter.setOnTournamentClickListener {
             findNavController().navigate(
-                SearchTournamentFragmentDirections.actionSearchTournamentFragmentToTournamentDetailFragment(
-                    tournament = it,
+                SearchTournamentFragmentDirections.actionSearchTournamentFragmentToSetupTournamentFragment(
+                    id = it.id,
                     title = it.tournamentName
                 )
             )
@@ -56,39 +56,53 @@ class SearchTournamentFragment : Fragment(R.layout.fragment_search_tournament) {
 
         searchTournamentAdapter.setOnJoinClickListener { tournament ->
 
-            if (!tournament.scheduled) {
-                Toast.makeText(
-                    context,
-                    "Tournament is not scheduled yet. \nPlease try again later.",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else if (tournament.persons.size >= tournament.maxPersons) {
-                Toast.makeText(
-                    context,
-                    "Tournament is full. \nTry joining another tournament.",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else if (tournament.tournamentVisibility == "Private") {
-
-                val dialog = Dialog(requireContext())
-                dialog.setContentView(R.layout.private_tournament_join_dialog)
-                val etJoinPrvt = dialog.findViewById<TextInputEditText>(R.id.et_private_join_pswd)
-                val btnJoinPrvt = dialog.findViewById<AppCompatButton>(R.id.btn_join_prvt)
-
-                btnJoinPrvt.setOnClickListener {
-                    if (tournament.tournamentPassword == etJoinPrvt.text.toString()) {
-                        dialog.dismiss()
-                        showProgress(true)
-                        viewModel.joinTournament(tournament.id)
-                    } else {
-                        Toast.makeText(context, "Password is incorrect!", Toast.LENGTH_SHORT).show()
-                    }
+            when {
+                tournament.scheduled == "Finished" -> {
+                    Toast.makeText(
+                        context,
+                        "Tournament is finished. \nTry joining other tournament.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-                dialog.show()
+                tournament.persons.size >= tournament.maxPersons -> {
+                    Toast.makeText(
+                        context,
+                        "Tournament is full. \nTry joining another tournament.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                tournament.tournamentVisibility == "Private" -> {
 
-            } else {
-                showProgress(true)
-                viewModel.joinTournament(tournament.id)
+                    val dialog = Dialog(requireContext())
+                    dialog.setContentView(R.layout.private_tournament_join_dialog)
+                    val etJoinPrvt =
+                        dialog.findViewById<TextInputEditText>(R.id.et_private_join_pswd)
+                    val btnJoinPrvt = dialog.findViewById<AppCompatButton>(R.id.btn_join_prvt)
+
+                    btnJoinPrvt.setOnClickListener {
+                        if (tournament.tournamentPassword == etJoinPrvt.text.toString()) {
+                            dialog.dismiss()
+                            showProgress(true)
+                            viewModel.joinTournament(tournament.id)
+                        } else {
+                            Toast.makeText(context, "Password is incorrect!", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
+                    dialog.show()
+
+                }
+                tournament.scheduled == "Started" -> {
+                    Toast.makeText(
+                        context,
+                        "Tournament already started. \nTry joining other tournament.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                else -> {
+                    showProgress(true)
+                    viewModel.joinTournament(tournament.id)
+                }
             }
         }
 

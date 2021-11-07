@@ -90,10 +90,6 @@ class MainActivity : AppCompatActivity() {
             navController.addOnDestinationChangedListener { _, destination, _ ->
 
                 when (destination.id) {
-                    R.id.tournamentDetailFragment -> {
-                        a = false
-                        drawerLayout.closeDrawer(GravityCompat.START)
-                    }
 
                     R.id.setupTournamentFragment -> {
                         a = false
@@ -121,6 +117,16 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     R.id.standingsFragment -> {
+                        a = false
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                    }
+
+                    R.id.matchesFragment -> {
+                        a = false
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                    }
+
+                    R.id.participantsFragment -> {
                         a = false
                         drawerLayout.closeDrawer(GravityCompat.START)
                     }

@@ -42,7 +42,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             findNavController().navigate(
                 HomeFragmentDirections.actionHomeFragmentToSetupTournamentFragment(
                     title = it.tournamentName,
-                    tournament = it
+                    id = it.id
                 )
             )
 
@@ -51,7 +51,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         myTournamentAdapter.setOnDeleteClickListener {
             findNavController().navigate(
                 HomeFragmentDirections.actionGlobalRemoveTournamentDialogFragment(
-                    tournament = it
+                    id = it.id
                 )
             )
         }

@@ -25,10 +25,10 @@ class SearchTournamentViewModel : ViewModel() {
     fun joinTournament(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
 
-            val user = users.whereArrayContains("tournamentsJoined", id).get().await()
-                .toObjects(User::class.java)
+            val user = users.document(Firebase.auth.currentUser!!.uid).get().await()
+                .toObject(User::class.java)
 
-            if (user.size > 0) {
+            if (user!!.tournamentsJoined.contains(id)) {
                 showErrorMessage("You already joined the tournament")
                 return@launch
             }

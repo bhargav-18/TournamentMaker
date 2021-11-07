@@ -56,7 +56,7 @@ class JoinedTournamentAdapter() :
         holder.apply {
             tournamentName.text = tournament.tournamentName
             tournamentSport.text = tournament.tournamentSport
-            tournamentScheduled.text = if (tournament.scheduled) "Scheduled" else "Starting Soon"
+            tournamentScheduled.text = tournament.scheduled
             CoroutineScope(Dispatchers.Main).launch {
                 val user = users.whereEqualTo("uid", tournament.host).get().await()
                     .toObjects(User::class.java)

@@ -33,6 +33,7 @@ class AddTournamentFragment : Fragment(R.layout.fragment_add_tournament) {
             etOtherSportName.setText(viewModel.otherSport)
             etTournamentPassword.setText(viewModel.tournamentPassword)
             etTournamentAccessPassword.setText(viewModel.tournamentAccessPassword)
+            etNumberOfPersons.setText(viewModel.tournamentPersons.toString())
 
             etTournamentName.addTextChangedListener {
                 viewModel.name = it.toString()
@@ -56,6 +57,10 @@ class AddTournamentFragment : Fragment(R.layout.fragment_add_tournament) {
 
             etTournamentAccessPassword.addTextChangedListener {
                 viewModel.tournamentAccessPassword = it.toString()
+            }
+
+            etNumberOfPersons.addTextChangedListener {
+                viewModel.tournamentPersons = it.toString()
             }
 
             rbPublic.isChecked = true

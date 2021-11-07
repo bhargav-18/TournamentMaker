@@ -1,4 +1,4 @@
-package com.example.tournamentmaker.mainactivity.mainfragments.ui.creatematches
+package com.example.tournamentmaker.mainactivity.mainfragments.ui.matches
 
 import android.annotation.SuppressLint
 import android.graphics.Typeface
@@ -10,7 +10,6 @@ import android.widget.TableRow
 import android.widget.TextView
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.tournamentmaker.R
 import com.example.tournamentmaker.data.entity.Tournament
@@ -24,9 +23,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 
-class CreateMatchesFragment : Fragment(R.layout.fragment_create_matches) {
+class MatchesFragment : Fragment(R.layout.fragment_matches) {
 
-    private val args: CreateMatchesFragmentArgs by navArgs()
+    private val args: MatchesFragmentArgs by navArgs()
     private lateinit var binding: FragmentCreateMatchesBinding
     private val tournaments = FirebaseFirestore.getInstance().collection("tournaments")
     private val users = FirebaseFirestore.getInstance().collection("users")
@@ -51,16 +50,14 @@ class CreateMatchesFragment : Fragment(R.layout.fragment_create_matches) {
                 list.add(user.userName)
             }
 
-            listMatches(list, persons)
+            listMatches(list)
 
         }
 
     }
 
     @SuppressLint("SetTextI18n")
-    private fun listMatches(ListTeam: ArrayList<String>, ListID: ArrayList<String>) {
-
-        val matchesArray: ArrayList<Map<String, Map<String, Map<String, String>>>> = arrayListOf()
+    private fun listMatches(ListTeam: ArrayList<String>) {
 
         val numTeams = ListTeam.size
         if (ListTeam.size % 2 != 0) {
@@ -105,10 +102,6 @@ class CreateMatchesFragment : Fragment(R.layout.fragment_create_matches) {
         val teams: ArrayList<String> = arrayListOf()
         teams.addAll(ListTeam)
         teams.removeAt(0)
-
-        val teamsId: ArrayList<String> = arrayListOf()
-        teamsId.addAll(ListID)
-        teamsId.removeAt(0)
 
         val teamsSize: Int = teams.size
 
@@ -155,10 +148,6 @@ class CreateMatchesFragment : Fragment(R.layout.fragment_create_matches) {
                 gravity = Gravity.CENTER
             }
 
-            val m = mapOf(teamsId[teamIdx] to mapOf(ListID[0] to mapOf("winner" to "")))
-
-            matchesArray.add(m)
-
             rowMatch.addView(match)
             binding.tlMatches.addView(rowMatch)
 
@@ -178,20 +167,11 @@ class CreateMatchesFragment : Fragment(R.layout.fragment_create_matches) {
                     text = "${teams[firstTeam]} vs ${teams[secondTeam]}"
                     gravity = Gravity.CENTER
                 }
-                val m1 =
-                    mapOf(teamsId[firstTeam] to mapOf(teamsId[secondTeam] to mapOf("winner" to "")))
-
-                matchesArray.add(m1)
 
                 rowMatches.addView(matches)
                 binding.tlMatches.addView(rowMatches)
             }
         }
-
-        CoroutineScope(Dispatchers.IO).launch {
-            tournaments.document(tournament.id).update("matches", matchesArray).await()
-        }
-
     }
 
 }

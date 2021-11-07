@@ -3,6 +3,7 @@ package com.example.tournamentmaker.adapter
 import android.annotation.SuppressLint
 import android.os.Build
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -16,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-class ParticipantsAdapter() :
+class ParticipantsAdapter(val type: String) :
     RecyclerView.Adapter<ParticipantsAdapter.ParticipantViewHolder>() {
 
     private val users = FirebaseFirestore.getInstance().collection("users")
@@ -59,6 +60,12 @@ class ParticipantsAdapter() :
                 onRemoveClickListener?.let {
                     it(person)
                 }
+            }
+
+            if (type == "participant") {
+                removeParticipant.visibility = View.GONE
+            } else {
+                removeParticipant.visibility = View.VISIBLE
             }
 
             itemView.setOnClickListener {

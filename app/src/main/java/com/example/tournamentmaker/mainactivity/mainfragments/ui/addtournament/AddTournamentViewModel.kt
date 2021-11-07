@@ -65,10 +65,18 @@ class AddTournamentViewModel constructor(
             state.set("tournamentVisibility", value)
         }
 
+    var tournamentPersons = state.get<String>("tournamentPersons") ?: ""
+        set(value) {
+            field = value
+            state.set("tournamentPersons", value)
+        }
+
     fun addTournament() {
         val error =
             if (name.isEmpty() || sport == "Select Sport" || type == "Select Type" || tournamentAccessPassword.isEmpty()) {
                 "The field must not be empty"
+            } else if (tournamentPersons.toInt() <= 0) {
+                "Number of persons should be greater than 0"
             } else if (sport == "Other" && otherSport.isEmpty()) {
                 "The field must not be empty"
             } else if (tournamentVisibility == "Private" && tournamentPassword.isEmpty()) {
@@ -88,6 +96,8 @@ class AddTournamentViewModel constructor(
                     tournamentType = type,
                     tournamentVisibility = tournamentVisibility,
                     tournamentPassword = tournamentPassword,
+                    maxPersons = tournamentPersons.toInt(),
+                    scheduled = "Scheduled",
                     tournamentAccessPassword = tournamentAccessPassword,
                     host = Firebase.auth.currentUser?.uid.toString()
                 )

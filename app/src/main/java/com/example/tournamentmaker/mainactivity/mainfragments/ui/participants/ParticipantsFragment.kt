@@ -1,4 +1,4 @@
-package com.example.tournamentmaker.mainactivity.mainfragments.ui.manageparticipants
+package com.example.tournamentmaker.mainactivity.mainfragments.ui.participants
 
 import android.os.Bundle
 import android.view.View
@@ -19,20 +19,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-class ManageParticipantsFragment : Fragment(R.layout.fragment_manage_participants) {
+class ParticipantsFragment : Fragment(R.layout.fragment_participants) {
 
     private lateinit var binding: FragmentManageParticipantsBinding
     private lateinit var participantsAdapter: ParticipantsAdapter
     private val tournaments = FirebaseFirestore.getInstance().collection("tournaments")
     private val users = FirebaseFirestore.getInstance().collection("users")
-    private val args: ManageParticipantsFragmentArgs by navArgs()
+    private val args: ParticipantsFragmentArgs by navArgs()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentManageParticipantsBinding.bind(view)
-        participantsAdapter = ParticipantsAdapter("manageParticipant")
+        participantsAdapter = ParticipantsAdapter("participant")
 
         getUpdatedList()
 

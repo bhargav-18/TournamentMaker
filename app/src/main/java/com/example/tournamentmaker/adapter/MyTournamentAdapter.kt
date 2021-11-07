@@ -49,7 +49,7 @@ class MyTournamentAdapter() :
         holder.apply {
             tournamentName.text = tournament.tournamentName
             tournamentSport.text = tournament.tournamentSport
-            tournamentScheduled.text = if (tournament.scheduled) "Scheduled" else "Starting Soon"
+            tournamentScheduled.text = tournament.scheduled
 
             deleteTournament.setOnClickListener {
                 onDeleteClickListener?.let {

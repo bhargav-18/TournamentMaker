@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.tournamentmaker.R
+import com.example.tournamentmaker.data.entity.Tournament
 import com.example.tournamentmaker.databinding.RemoveTournamentDialogFragmentBinding
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FieldValue
@@ -25,6 +26,7 @@ class RemoveTournamentDialogFragment : DialogFragment(R.layout.remove_tournament
     private val tournaments = FirebaseFirestore.getInstance().collection("tournaments")
     private val users = FirebaseFirestore.getInstance().collection("users")
     private lateinit var binding: RemoveTournamentDialogFragmentBinding
+    private lateinit var tournament: Tournament
 
     override fun onResume() {
         super.onResume()
@@ -38,31 +40,36 @@ class RemoveTournamentDialogFragment : DialogFragment(R.layout.remove_tournament
         super.onViewCreated(view, savedInstanceState)
 
         val args: RemoveTournamentDialogFragmentArgs by navArgs()
-        val tournament = args.tournament
+        val id = args.id
+
+
+        CoroutineScope(Dispatchers.IO).launch {
+            tournament = tournaments.document(id).get().await().toObject(Tournament::class.java)!!
+        }
         binding = RemoveTournamentDialogFragmentBinding.bind(view)
 
         binding.apply {
 
             btnRemoveTournament.setOnClickListener {
-                if (tournament?.tournamentAccessPassword == etRemoveTournamentPswd.text.toString()) {
+                if (tournament.tournamentAccessPassword == etRemoveTournamentPswd.text.toString()) {
                     CoroutineScope(Dispatchers.Main).launch {
 
                         try {
                             users.document(Firebase.auth.currentUser!!.uid)
                                 .update(
                                     "tournamentsCreated",
-                                    FieldValue.arrayRemove(tournament.id)
+                                    FieldValue.arrayRemove(id)
                                 )
                                 .await()
 
                             for (user in tournament.persons) {
                                 users.document(user).update(
                                     "tournamentsJoined",
-                                    FieldValue.arrayRemove(tournament.id)
+                                    FieldValue.arrayRemove(id)
                                 )
                             }
 
-                            tournaments.document(tournament.id).delete().await()
+                            tournaments.document(id).delete().await()
                             findNavController().navigate(RemoveTournamentDialogFragmentDirections.actionRemoveTournamentDialogFragmentToHomeFragment())
 
                         } catch (e: Exception) {

@@ -59,7 +59,7 @@ class SearchTournamentAdapter() :
         holder.apply {
             tournamentName.text = tournament.tournamentName
             tournamentSport.text = tournament.tournamentSport
-            tournamentScheduled.text = if (tournament.scheduled) "Scheduled" else "Starting Soon"
+            tournamentScheduled.text = tournament.scheduled
             CoroutineScope(Dispatchers.Main).launch {
                 val user = users.whereEqualTo("uid", tournament.host).get().await()
                     .toObjects(User::class.java)
@@ -73,7 +73,7 @@ class SearchTournamentAdapter() :
                         R.color.red, null
                     )
                 )
-            } else if (tournament.persons.size >= tournament.maxPersons || !tournament.scheduled) {
+            } else if (tournament.persons.size >= tournament.maxPersons || tournament.scheduled == "Finished") {
                 btnJoin.background.setTint(
                     btnJoin.context.resources.getColor(
                         R.color.gray, null

@@ -40,8 +40,8 @@ class JoinedTournamentsFragment : Fragment(R.layout.fragment_joined_tournaments)
 
         joinedTournamentAdapter.setOnTournamentClickListener {
             findNavController().navigate(
-                JoinedTournamentsFragmentDirections.actionJoinedTournamentsFragmentToTournamentDetailFragment(
-                    tournament = it,
+                JoinedTournamentsFragmentDirections.actionJoinedTournamentsFragmentToSetupTournamentFragment(
+                    id = it.id,
                     title = it.tournamentName
                 )
             )
