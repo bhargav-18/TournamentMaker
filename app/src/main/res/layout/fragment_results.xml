@@ -50,10 +50,19 @@
 
     </androidx.cardview.widget.CardView>
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/parent_layout_results"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="20dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_tournament_results"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/list_items_result" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

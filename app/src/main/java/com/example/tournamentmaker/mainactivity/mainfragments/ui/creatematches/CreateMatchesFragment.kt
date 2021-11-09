@@ -12,13 +12,11 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.tournamentmaker.R
 import com.example.tournamentmaker.data.entity.Tournament
 import com.example.tournamentmaker.data.entity.User
 import com.example.tournamentmaker.databinding.FragmentCreateMatchesBinding
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -64,7 +62,7 @@ class CreateMatchesFragment : Fragment(R.layout.fragment_create_matches) {
 
         showProgress(true)
 
-        val matchesArray: ArrayList<Map<String, Map<String, Map<String, String>>>> = arrayListOf()
+        val matchList: ArrayList<Map<String, Map<String, Map<String, String>>>> = arrayListOf()
 
         val numTeams = ListTeam.size
         if (ListTeam.size % 2 != 0) {
@@ -161,7 +159,7 @@ class CreateMatchesFragment : Fragment(R.layout.fragment_create_matches) {
 
             val m = mapOf(teamsId[teamIdx] to mapOf(ListID[0] to mapOf("winner" to "")))
 
-            matchesArray.add(m)
+            matchList.add(m)
 
             rowMatch.addView(match)
             binding.tlMatches.addView(rowMatch)
@@ -185,18 +183,40 @@ class CreateMatchesFragment : Fragment(R.layout.fragment_create_matches) {
                 val m1 =
                     mapOf(teamsId[firstTeam] to mapOf(teamsId[secondTeam] to mapOf("winner" to "")))
 
-                matchesArray.add(m1)
+                matchList.add(m1)
 
                 rowMatches.addView(matches)
                 binding.tlMatches.addView(rowMatches)
             }
         }
 
-        CoroutineScope(Dispatchers.IO).launch {
-            tournaments.document(tournament.id).update("matches", matchesArray).await()
-        }
+        CoroutineScope(Dispatchers.Main).launch {
 
-        showProgress(false)
+            showProgress(true)
+
+            tournaments.document(tournament.id).update("matches", matchList).await()
+
+            val resultsList: ArrayList<Map<String, Map<String, Float>>> = arrayListOf()
+            for (id in ListID) {
+
+                val map = mutableMapOf(
+                    id to mapOf(
+                        "played" to 0f,
+                        "won" to 0f,
+                        "lost" to 0f,
+                        "draw" to 0f,
+                        "tieBreaker" to 0f
+                    )
+                )
+
+                resultsList.add(map)
+
+            }
+
+            tournaments.document(tournament.id).update("results", resultsList).await()
+
+            showProgress(false)
+        }
 
     }
 

@@ -109,11 +109,19 @@ class SetupTournamentFragment : Fragment(R.layout.fragment_setup_tournament) {
             }
 
             btnResults.setOnClickListener {
-                findNavController().navigate(SetupTournamentFragmentDirections.actionSetupTournamentFragmentToResultsFragment())
+                findNavController().navigate(
+                    SetupTournamentFragmentDirections.actionSetupTournamentFragmentToResultsFragment(
+                        id = tournament.id
+                    )
+                )
             }
 
             btnStandings.setOnClickListener {
-                findNavController().navigate(SetupTournamentFragmentDirections.actionSetupTournamentFragmentToStandingsFragment())
+                findNavController().navigate(
+                    SetupTournamentFragmentDirections.actionSetupTournamentFragmentToStandingsFragment(
+                        id = tournament.id
+                    )
+                )
             }
 
             btnTournamentAccess.setOnClickListener {
