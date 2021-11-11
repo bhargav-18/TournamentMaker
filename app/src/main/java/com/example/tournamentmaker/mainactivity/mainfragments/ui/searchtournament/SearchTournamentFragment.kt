@@ -57,13 +57,6 @@ class SearchTournamentFragment : Fragment(R.layout.fragment_search_tournament) {
         searchTournamentAdapter.setOnJoinClickListener { tournament ->
 
             when {
-                tournament.scheduled == "Finished" -> {
-                    Toast.makeText(
-                        context,
-                        "Tournament is finished. \nTry joining other tournament.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
                 tournament.persons.size >= tournament.maxPersons -> {
                     Toast.makeText(
                         context,
@@ -91,13 +84,6 @@ class SearchTournamentFragment : Fragment(R.layout.fragment_search_tournament) {
                     }
                     dialog.show()
 
-                }
-                tournament.scheduled == "Started" -> {
-                    Toast.makeText(
-                        context,
-                        "Tournament already started. \nTry joining other tournament.",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
                 else -> {
                     showProgress(true)
@@ -151,7 +137,7 @@ class SearchTournamentFragment : Fragment(R.layout.fragment_search_tournament) {
 
             try {
                 val tournamentList =
-                    tournaments.whereNotIn("host", arrayListOf(Firebase.auth.currentUser!!.uid))
+                    tournaments.whereEqualTo("scheduled", "Scheduled")
                         .get().await().toObjects(Tournament::class.java)
                 searchTournamentAdapter.tournamentList = tournamentList
             } catch (e: Exception) {

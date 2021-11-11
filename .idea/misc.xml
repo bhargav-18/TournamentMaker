@@ -20,7 +20,7 @@
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/activity_main.xml" value="0.19907407407407407" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/auth_fragment.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/edit_profile_dialog.xml" value="0.22" />
-        <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/edit_result_dialog.xml" value="0.22" />
+        <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/edit_result_dialog.xml" value="0.18" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/fragment_add_tournament.xml" value="0.22" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/fragment_auth.xml" value="0.19010416666666666" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/fragment_auth_screen.xml" value="0.20416666666666666" />
@@ -43,7 +43,7 @@
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/list_items_joined_tournaments.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/list_items_my_tournaments.xml" value="0.22" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/list_items_participants.xml" value="0.20416666666666666" />
-        <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/list_items_result.xml" value="0.22" />
+        <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/list_items_result.xml" value="0.18" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/list_items_search_tournaments.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/list_items_tournaments.xml" value="0.22" />
         <entry key="..\:/Users/Bhargav Joshi/AndroidStudioProjects/TournamentMaker/app/src/main/res/layout/nav_header.xml" value="0.19907407407407407" />

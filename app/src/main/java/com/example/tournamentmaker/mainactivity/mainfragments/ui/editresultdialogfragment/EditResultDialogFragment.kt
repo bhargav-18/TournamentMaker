@@ -1,16 +1,21 @@
 package com.example.tournamentmaker.mainactivity.mainfragments.ui.editresultdialogfragment
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.tournamentmaker.R
 import com.example.tournamentmaker.data.entity.Tournament
 import com.example.tournamentmaker.data.entity.User
 import com.example.tournamentmaker.databinding.EditResultDialogBinding
+import com.example.tournamentmaker.util.hideKeyboard
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
@@ -78,10 +83,19 @@ class EditResultDialogFragment : DialogFragment(R.layout.edit_result_dialog) {
 
             btnUpdateResult.setOnClickListener {
 
+                hideKeyboard(activity as Activity)
+
+                showProgress(true)
+
+                if (rgWinner.checkedRadioButtonId == -1) {
+                    Toast.makeText(context, "Please select the winner", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
                 val map: Map<String, Map<String, Map<String, String>>> =
                     mapOf(args.persons[0] to mapOf(args.persons[1] to mapOf("winner" to winner)))
 
-                CoroutineScope(Dispatchers.IO).launch {
+                CoroutineScope(Dispatchers.Main).launch {
 
                     val tournament =
                         tournaments.document(args.id).get().await()
@@ -95,42 +109,81 @@ class EditResultDialogFragment : DialogFragment(R.layout.edit_result_dialog) {
                     tournaments.document(args.id)
                         .update("matches", matchesArray).await()
 
-                    val resultsArray = tournament.results
-                    val newResultsArray: ArrayList<Map<String, Map<String, Float>>> = arrayListOf()
+                    tournaments.document(args.id)
+                        .update("results.${args.persons[0]}.played", FieldValue.increment(1))
 
-                    var m: Map<String, Map<String, Float>>
+                    when (winner) {
+                        args.persons[0] -> {
+                            tournaments.document(args.id)
+                                .update("results.${args.persons[0]}.won", FieldValue.increment(1))
+                                .await()
 
-                    for (r in resultsArray) {
-                        if (r.keys.toList()[0] == args.persons[0] || r.keys.toList()[0] == args.persons[1]) {
+                            tournaments.document(args.id)
+                                .update("results.${args.persons[1]}.lost", FieldValue.increment(1))
+                                .await()
+                        }
+                        "Draw" -> {
+                            tournaments.document(args.id)
+                                .update("results.${args.persons[0]}.draw", FieldValue.increment(1))
+                                .await()
 
-                            m = mutableMapOf(
-                                r.keys.toList()[0] to mapOf(
-                                    "played" to r.values.toList()[0].toList()[0].second + 1f,
-                                    "won" to if (winner == r.keys.toList()[0]) r.values.toList()[0].toList()[1].second + 1f else r.values.toList()[0].toList()[1].second,
-                                    "lost" to
-                                            if (winner != r.keys.toList()[0] && winner != "Draw") r.values.toList()[0].toList()[2].second + 1f else r.values.toList()[0].toList()[2].second,
-                                    "draw" to if (winner == "Draw") r.values.toList()[0].toList()[3].second + 1f else r.values.toList()[0].toList()[3].second,
-                                    "tieBreaker" to r.values.toList()[0].toList()[4].second + etPerson1Score.text.toString()
-                                        .toFloat()
-                                )
-                            )
+                            tournaments.document(args.id)
+                                .update("results.${args.persons[1]}.draw", FieldValue.increment(1))
+                                .await()
+                        }
+                        else -> {
+                            tournaments.document(args.id)
+                                .update("results.${args.persons[0]}.lost", FieldValue.increment(1))
+                                .await()
 
-                            newResultsArray.add(m)
-
-                        } else {
-                            newResultsArray.add(r)
+                            tournaments.document(args.id)
+                                .update("results.${args.persons[1]}.won", FieldValue.increment(1))
+                                .await()
                         }
                     }
 
                     tournaments.document(args.id)
-                        .update("results", resultsArray).await()
+                        .update(
+                            "results.${args.persons[0]}.tieBreaker",
+                            FieldValue.increment(etPerson1Score.text.toString().toLong())
+                        ).await()
+
+                    tournaments.document(args.id)
+                        .update(
+                            "results.${args.persons[1]}.tieBreaker",
+                            FieldValue.increment(etPerson2Score.text.toString().toLong())
+                        ).await()
+
+                    showProgress(false)
+
+                    findNavController().navigate(
+                        EditResultDialogFragmentDirections
+                            .actionEditResultDialogFragmentToResultsFragment(
+                                id = tournament.id
+                            )
+                    )
 
                 }
-
-                dialog?.dismiss()
             }
 
         }
 
     }
+
+    private fun showProgress(bool: Boolean) {
+        binding.apply {
+            cvProgressEditResult.isVisible = bool
+            if (bool) {
+                parentLayoutEditResult.alpha = 0.5f
+                activity?.window!!.setFlags(
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                )
+            } else {
+                parentLayoutEditResult.alpha = 1f
+                activity?.window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            }
+        }
+    }
+
 }

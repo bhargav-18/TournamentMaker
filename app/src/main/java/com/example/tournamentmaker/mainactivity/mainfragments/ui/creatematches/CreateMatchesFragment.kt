@@ -17,6 +17,7 @@ import com.example.tournamentmaker.R
 import com.example.tournamentmaker.data.entity.Tournament
 import com.example.tournamentmaker.data.entity.User
 import com.example.tournamentmaker.databinding.FragmentCreateMatchesBinding
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -196,24 +197,22 @@ class CreateMatchesFragment : Fragment(R.layout.fragment_create_matches) {
 
             tournaments.document(tournament.id).update("matches", matchList).await()
 
-            val resultsList: ArrayList<Map<String, Map<String, Float>>> = arrayListOf()
             for (id in ListID) {
 
                 val map = mutableMapOf(
-                    id to mapOf(
-                        "played" to 0f,
-                        "won" to 0f,
-                        "lost" to 0f,
-                        "draw" to 0f,
-                        "tieBreaker" to 0f
-                    )
+
+                    "played" to 0f,
+                    "won" to 0f,
+                    "lost" to 0f,
+                    "draw" to 0f,
+                    "tieBreaker" to 0f
+
                 )
 
-                resultsList.add(map)
+                tournaments.document(tournament.id).update("results.${id}", map)
 
             }
 
-            tournaments.document(tournament.id).update("results", resultsList).await()
 
             showProgress(false)
         }

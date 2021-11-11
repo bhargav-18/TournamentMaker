@@ -16,5 +16,5 @@ data class Tournament(
     val persons: ArrayList<String> = arrayListOf(),
     val host: String = "",
     val matches: ArrayList<Map<String, Map<String, Map<String, String>>>> = arrayListOf(),
-    val results: ArrayList<Map<String, Map<String, Float>>> = arrayListOf()
+    val results: Map<String, Map<String, Float>> = mapOf()
 )

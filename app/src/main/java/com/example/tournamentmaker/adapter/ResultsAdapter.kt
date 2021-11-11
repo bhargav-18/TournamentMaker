@@ -60,7 +60,11 @@ class ResultsAdapter() :
                 } else {
                     scorePerson1.isVisible = true
                     scorePerson2.isVisible = true
+                    btnEdit.isVisible = false
                 }
+
+                val str = result.values.toList()[0].toList()[0].toList()[1].toString()
+                val winner = str.substringAfter("{winner=").substringBefore("}")
 
                 val user1 =
                     users.document(result.keys.toList()[0]).get().await()
@@ -68,6 +72,21 @@ class ResultsAdapter() :
                 val user2 =
                     users.document(result.values.toList()[0].toList()[0].toList()[0].toString())
                         .get().await().toObject(User::class.java)!!
+
+                when (winner) {
+                    user1.uid -> {
+                        scorePerson1.text = "2"
+                        scorePerson2.text = "0"
+                    }
+                    user2.uid -> {
+                        scorePerson2.text = "2"
+                        scorePerson1.text = "0"
+                    }
+                    "Draw" -> {
+                        scorePerson1.text = "1"
+                        scorePerson2.text = "1"
+                    }
+                }
 
                 person1.text = user1.userName
                 person2.text = user2.userName
