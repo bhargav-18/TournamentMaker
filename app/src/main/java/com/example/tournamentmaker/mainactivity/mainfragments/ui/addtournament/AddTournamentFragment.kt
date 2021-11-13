@@ -1,5 +1,6 @@
 package com.example.tournamentmaker.mainactivity.mainfragments.ui.addtournament
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.tournamentmaker.R
 import com.example.tournamentmaker.databinding.FragmentAddTournamentBinding
 import com.example.tournamentmaker.util.exhaustive
+import com.example.tournamentmaker.util.hideKeyboard
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collect
 
@@ -33,7 +35,7 @@ class AddTournamentFragment : Fragment(R.layout.fragment_add_tournament) {
             etOtherSportName.setText(viewModel.otherSport)
             etTournamentPassword.setText(viewModel.tournamentPassword)
             etTournamentAccessPassword.setText(viewModel.tournamentAccessPassword)
-            etNumberOfPersons.setText(viewModel.tournamentPersons.toString())
+            etNumberOfPersons.setText(viewModel.tournamentPersons)
 
             etTournamentName.addTextChangedListener {
                 viewModel.name = it.toString()
@@ -98,6 +100,7 @@ class AddTournamentFragment : Fragment(R.layout.fragment_add_tournament) {
 
             btnSave.setOnClickListener {
                 showProgress(true)
+                hideKeyboard(activity as Activity)
                 viewModel.addTournament()
             }
 

@@ -75,6 +75,8 @@ class AddTournamentViewModel constructor(
         val error =
             if (name.isEmpty() || sport == "Select Sport" || type == "Select Type" || tournamentAccessPassword.isEmpty()) {
                 "The field must not be empty"
+            } else if (tournamentPersons.isBlank()) {
+                "Please enter number of person"
             } else if (tournamentPersons.toInt() <= 0) {
                 "Number of persons should be greater than 0"
             } else if (sport == "Other" && otherSport.isEmpty()) {
@@ -92,7 +94,7 @@ class AddTournamentViewModel constructor(
                 val tournament = Tournament(
                     id = id,
                     tournamentName = name,
-                    tournamentSport = sport,
+                    tournamentSport = if (sport != "Other") sport else otherSport,
                     tournamentType = type,
                     tournamentVisibility = tournamentVisibility,
                     tournamentPassword = tournamentPassword,

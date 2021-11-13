@@ -17,26 +17,26 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class ResultsFragment : Fragment(R.layout.fragment_results) {
 
     private lateinit var binding: FragmentResultsBinding
     private lateinit var resultsAdapter: ResultsAdapter
     private val tournaments = FirebaseFirestore.getInstance().collection("tournaments")
-    private val users = FirebaseFirestore.getInstance().collection("users")
     private val args: ResultsFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentResultsBinding.bind(view)
-        resultsAdapter = ResultsAdapter()
+        resultsAdapter = ResultsAdapter(args.id)
 
         getUpdatedList()
 
         setUpRecyclerView()
 
-        resultsAdapter.setOnEitClickListener {
+        resultsAdapter.setOnEditClickListener {
             findNavController().navigate(
                 ResultsFragmentDirections.actionResultsFragmentToEditResultDialogFragment(
                     persons = it,
@@ -49,17 +49,25 @@ class ResultsFragment : Fragment(R.layout.fragment_results) {
 
     private fun getUpdatedList() {
 
-        CoroutineScope(Dispatchers.Main).launch {
-            showProgress(true)
+        CoroutineScope(Dispatchers.IO).launch {
+
+            withContext(Dispatchers.Main) {
+                showProgress(true)
+            }
+
 
             val tournament =
                 tournaments.document(args.id).get().await()
                     .toObject(Tournament::class.java)
             val resultList =
                 tournament!!.matches as List<Map<String, Map<String, Map<String, String>>>>
-            resultsAdapter.resultList = resultList
 
-            showProgress(false)
+            withContext(Dispatchers.Main) {
+                resultsAdapter.resultList = resultList
+
+                showProgress(false)
+            }
+
         }
 
     }

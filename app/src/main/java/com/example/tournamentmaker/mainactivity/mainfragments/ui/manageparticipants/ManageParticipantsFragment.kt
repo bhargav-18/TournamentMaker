@@ -18,6 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class ManageParticipantsFragment : Fragment(R.layout.fragment_manage_participants) {
 
@@ -46,7 +47,10 @@ class ManageParticipantsFragment : Fragment(R.layout.fragment_manage_participant
 
             CoroutineScope(Dispatchers.IO).launch {
 
-                showProgress(true)
+                withContext(Dispatchers.Main) {
+                    showProgress(true)
+                }
+
 
                 try {
                     tournaments.document(args.id)
@@ -57,10 +61,16 @@ class ManageParticipantsFragment : Fragment(R.layout.fragment_manage_participant
                         .await()
 
                 } catch (e: Exception) {
-                    Toast.makeText(context, e.message.toString(), Toast.LENGTH_SHORT).show()
+
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, e.message.toString(), Toast.LENGTH_SHORT).show()
+                    }
+
                 }
 
-                showProgress(false)
+                withContext(Dispatchers.Main) {
+                    showProgress(false)
+                }
 
             }
 
@@ -72,16 +82,23 @@ class ManageParticipantsFragment : Fragment(R.layout.fragment_manage_participant
 
     private fun getUpdatedList() {
 
-        CoroutineScope(Dispatchers.Main).launch {
-            showProgress(true)
+        CoroutineScope(Dispatchers.IO).launch {
+
+            withContext(Dispatchers.Main) {
+                showProgress(true)
+            }
+
 
             val tournament =
                 tournaments.document(args.id).get().await()
                     .toObject(Tournament::class.java)
             val personsList = tournament!!.persons as List<String>
-            participantsAdapter.personList = personsList
 
-            showProgress(false)
+            withContext(Dispatchers.Main) {
+                participantsAdapter.personList = personsList
+
+                showProgress(false)
+            }
         }
 
     }

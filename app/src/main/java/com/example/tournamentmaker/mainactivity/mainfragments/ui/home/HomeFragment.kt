@@ -19,6 +19,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -77,21 +78,30 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun getUpdatedList() {
 
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.IO).launch {
 
-            showProgress(true)
+            withContext(Dispatchers.Main) {
+                showProgress(true)
+            }
 
             try {
                 val tournamentList =
                     tournaments.whereEqualTo("host", Firebase.auth.currentUser!!.uid).get()
                         .await()
                         .toObjects(Tournament::class.java)
-                myTournamentAdapter.tournamentList = tournamentList
+                withContext(Dispatchers.Main) {
+                    myTournamentAdapter.tournamentList = tournamentList
+                }
             } catch (e: Exception) {
-                Snackbar.make(requireView(), e.message.toString(), Snackbar.LENGTH_LONG).show()
+                withContext(Dispatchers.Main) {
+                    Snackbar.make(requireView(), e.message.toString(), Snackbar.LENGTH_LONG).show()
+                }
+
             }
 
-            showProgress(false)
+            withContext(Dispatchers.Main) {
+                showProgress(false)
+            }
 
         }
     }

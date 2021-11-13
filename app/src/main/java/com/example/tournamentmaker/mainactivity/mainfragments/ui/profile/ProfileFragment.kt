@@ -15,6 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
@@ -37,20 +38,30 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             tvUserEmail.text = user?.email
             tvEmailId.text = user?.email
 
-            CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.IO).launch {
+
                 val tournament = tournaments.whereEqualTo("host", user?.uid).get().await()
                     .toObjects(Tournament::class.java)
 
                 if (tournament.size >= 3) {
+
                     val tournaments =
                         "${tournament[0].tournamentName}\n${tournament[1].tournamentName}\n${tournament[2].tournamentName}\n....."
-                    tvListTournament.text = tournaments
+
+                    withContext(Dispatchers.Main) {
+                        tvListTournament.text = tournaments
+                    }
+
                 } else {
                     var tournaments = ""
                     for (t in tournament) {
                         tournaments = tournaments + t.tournamentName + "\n"
                     }
-                    tvListTournament.text = tournaments
+
+                    withContext(Dispatchers.Main) {
+                        tvListTournament.text = tournaments
+                    }
+
                 }
             }
 

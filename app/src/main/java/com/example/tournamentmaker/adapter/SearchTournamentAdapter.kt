@@ -19,6 +19,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class SearchTournamentAdapter() :
     RecyclerView.Adapter<SearchTournamentAdapter.MyTournamentViewHolder>() {
@@ -57,13 +58,19 @@ class SearchTournamentAdapter() :
     ) {
         val tournament: Tournament = tournamentList[position]
         holder.apply {
+
             tournamentName.text = tournament.tournamentName
             tournamentSport.text = tournament.tournamentSport
             tournamentScheduled.text = tournament.scheduled
-            CoroutineScope(Dispatchers.Main).launch {
+
+            CoroutineScope(Dispatchers.IO).launch {
                 val user = users.whereEqualTo("uid", tournament.host).get().await()
                     .toObjects(User::class.java)
-                tournamentHost.text = "Hosted by:\n" + user[0].userName
+
+                withContext(Dispatchers.Main){
+                    tournamentHost.text = "Hosted by:\n" + user[0].userName
+                }
+
             }
             personsJoined.text =
                 "${tournament.persons.size} / ${tournament.maxPersons}"
@@ -91,12 +98,6 @@ class SearchTournamentAdapter() :
                     it(tournament)
                 }
             }
-
-            itemView.setOnClickListener {
-                onTournamentClickListener?.let {
-                    it(tournament)
-                }
-            }
         }
     }
 
@@ -118,12 +119,6 @@ class SearchTournamentAdapter() :
     var tournamentList: List<Tournament>
         get() = differ.currentList
         set(value) = differ.submitList(value)
-
-    private var onTournamentClickListener: ((Tournament) -> Unit)? = null
-
-    fun setOnTournamentClickListener(listener: (Tournament) -> Unit) {
-        onTournamentClickListener = listener
-    }
 
     private var onJoinClickListener: ((Tournament) -> Unit)? = null
 

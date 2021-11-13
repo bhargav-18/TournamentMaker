@@ -39,6 +39,8 @@ class StandingsFragment : Fragment(R.layout.fragment_standings) {
 
         CoroutineScope(Dispatchers.Main).launch {
 
+            showProgress(true)
+
             tournament = tournaments.document(args.id).get().await()
                 .toObject(Tournament::class.java)!!
 
@@ -239,6 +241,8 @@ class StandingsFragment : Fragment(R.layout.fragment_standings) {
                 binding.tlStandings.addView(rowTable)
 
             }
+
+            showProgress(false)
         }
     }
 

@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.tournamentmaker.R
 import com.example.tournamentmaker.data.entity.Tournament
@@ -23,6 +24,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 
 class CreateMatchesFragment : Fragment(R.layout.fragment_create_matches) {
@@ -39,7 +41,7 @@ class CreateMatchesFragment : Fragment(R.layout.fragment_create_matches) {
         binding = FragmentCreateMatchesBinding.bind(view)
 
         val id = args.id
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             tournament = tournaments.document(id).get().await().toObject(Tournament::class.java)!!
             val persons = tournament.persons
 
@@ -52,7 +54,9 @@ class CreateMatchesFragment : Fragment(R.layout.fragment_create_matches) {
                 list.add(user.userName)
             }
 
-            listMatches(list, persons)
+            withContext(Dispatchers.Main) {
+                listMatches(list, persons)
+            }
 
         }
 
@@ -191,9 +195,13 @@ class CreateMatchesFragment : Fragment(R.layout.fragment_create_matches) {
             }
         }
 
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.IO).launch {
 
-            showProgress(true)
+
+            withContext(Dispatchers.Main) {
+                showProgress(true)
+            }
+
 
             tournaments.document(tournament.id).update("matches", matchList).await()
 
@@ -214,7 +222,10 @@ class CreateMatchesFragment : Fragment(R.layout.fragment_create_matches) {
             }
 
 
-            showProgress(false)
+            withContext(Dispatchers.Main) {
+                showProgress(false)
+            }
+
         }
 
     }

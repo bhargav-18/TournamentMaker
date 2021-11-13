@@ -10,9 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.tournamentmaker.R
-import com.example.tournamentmaker.authactivity.authfragments.ui.login.LoginViewModel
 import com.example.tournamentmaker.databinding.FragmentForgotPasswordBinding
-import com.example.tournamentmaker.databinding.FragmentLoginUserBinding
 import com.example.tournamentmaker.util.exhaustive
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collect

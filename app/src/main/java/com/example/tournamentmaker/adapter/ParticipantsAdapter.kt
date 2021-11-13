@@ -17,6 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class ParticipantsAdapter(val id: String) :
     RecyclerView.Adapter<ParticipantsAdapter.ParticipantViewHolder>() {
@@ -54,18 +55,24 @@ class ParticipantsAdapter(val id: String) :
         val person: String = personList[position]
         holder.apply {
 
-            CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.IO).launch {
                 val user = users.document(person).get().await().toObject(User::class.java)
-                tvPersons.text = user?.userName
 
                 tournament =
                     tournaments.document(id).get().await().toObject(Tournament::class.java)!!
 
-                if (tournament.matches.size > 0) {
-                    removeParticipant.visibility = View.GONE
-                } else {
-                    removeParticipant.visibility = View.VISIBLE
+
+                withContext(Dispatchers.Main) {
+
+                    tvPersons.text = user?.userName
+                    if (tournament.matches.size > 0) {
+                        removeParticipant.visibility = View.GONE
+                    } else {
+                        removeParticipant.visibility = View.VISIBLE
+                    }
+
                 }
+
             }
 
             removeParticipant.setOnClickListener {

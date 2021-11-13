@@ -20,6 +20,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class RemoveTournamentDialogFragment : DialogFragment(R.layout.remove_tournament_dialog_fragment) {
 
@@ -51,8 +52,10 @@ class RemoveTournamentDialogFragment : DialogFragment(R.layout.remove_tournament
         binding.apply {
 
             btnRemoveTournament.setOnClickListener {
+
                 if (tournament.tournamentAccessPassword == etRemoveTournamentPswd.text.toString()) {
-                    CoroutineScope(Dispatchers.Main).launch {
+
+                    CoroutineScope(Dispatchers.IO).launch {
 
                         try {
                             users.document(Firebase.auth.currentUser!!.uid)
@@ -70,11 +73,24 @@ class RemoveTournamentDialogFragment : DialogFragment(R.layout.remove_tournament
                             }
 
                             tournaments.document(id).delete().await()
-                            findNavController().navigate(RemoveTournamentDialogFragmentDirections.actionRemoveTournamentDialogFragmentToHomeFragment())
+
+                            withContext(Dispatchers.Main) {
+
+                                findNavController().navigate(
+                                    RemoveTournamentDialogFragmentDirections.actionRemoveTournamentDialogFragmentToHomeFragment()
+                                )
+
+                            }
+
 
                         } catch (e: Exception) {
-                            Toast.makeText(context, e.message.toString(), Toast.LENGTH_SHORT).show()
-                            dialog?.dismiss()
+
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(context, e.message.toString(), Toast.LENGTH_SHORT)
+                                    .show()
+                                dialog?.dismiss()
+                            }
+
                         }
 
                     }

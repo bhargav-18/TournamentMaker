@@ -24,6 +24,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 
 class MatchesFragment : Fragment(R.layout.fragment_matches) {
@@ -40,9 +41,11 @@ class MatchesFragment : Fragment(R.layout.fragment_matches) {
         binding = FragmentMatchesBinding.bind(view)
 
         val id = args.id
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.IO).launch {
 
-            showProgress(true)
+            withContext(Dispatchers.Main) {
+                showProgress(true)
+            }
 
             tournament = tournaments.document(id).get().await().toObject(Tournament::class.java)!!
             val persons = tournament.persons
@@ -56,9 +59,11 @@ class MatchesFragment : Fragment(R.layout.fragment_matches) {
                 list.add(user.userName)
             }
 
-            listMatches(list)
+            withContext(Dispatchers.Main) {
+                listMatches(list)
+                showProgress(false)
+            }
 
-            showProgress(false)
 
         }
 

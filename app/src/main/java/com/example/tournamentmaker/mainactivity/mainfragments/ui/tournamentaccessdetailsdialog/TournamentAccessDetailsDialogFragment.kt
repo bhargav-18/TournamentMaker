@@ -15,6 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class TournamentAccessDetailsDialogFragment :
     DialogFragment(R.layout.tournament_access_details_dialog) {
@@ -41,24 +42,27 @@ class TournamentAccessDetailsDialogFragment :
 
         binding.apply {
 
-            CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.IO).launch {
 
                 tournament =
                     tournaments.document(id).get().await().toObject(Tournament::class.java)!!
 
-                if (tournament.tournamentVisibility == "Private") {
-                    tvTournamentDetailsPassword.visibility = View.VISIBLE
-                } else {
-                    tvTournamentDetailsPassword.visibility = View.GONE
+                withContext(Dispatchers.Main) {
+
+                    if (tournament.tournamentVisibility == "Private") {
+                        tvTournamentDetailsPassword.visibility = View.VISIBLE
+                    } else {
+                        tvTournamentDetailsPassword.visibility = View.GONE
+                    }
+
+                    tvTournamentDetailsName.text = tournament.tournamentName
+                    tvTournamentDetailsId.text = "Tournament ID:\n" + tournament.id
+                    tvTournamentDetailsPassword.text = "Password:\n" + tournament.tournamentPassword
+                    tvTournamentDetailsAccessPassword.text =
+                        "Access Password:\n" + tournament.tournamentAccessPassword
                 }
-
-                tvTournamentDetailsName.text = tournament.tournamentName
-                tvTournamentDetailsId.text = "Tournament ID:\n" + tournament.id
-                tvTournamentDetailsPassword.text = "Password:\n" + tournament.tournamentPassword
-                tvTournamentDetailsAccessPassword.text =
-                    "Access Password:\n" + tournament.tournamentAccessPassword
-
             }
+
         }
     }
 }

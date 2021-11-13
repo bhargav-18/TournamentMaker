@@ -7,6 +7,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('F:\\tournament key.jks')
+            storePassword 'tournament'
+            keyAlias 'key0'
+            keyPassword 'tournament'
+        }
+    }
     compileSdk 30
     buildToolsVersion "30.0.3"
 
@@ -26,6 +34,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {

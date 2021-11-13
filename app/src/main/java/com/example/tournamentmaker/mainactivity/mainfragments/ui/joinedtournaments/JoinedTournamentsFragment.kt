@@ -19,6 +19,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class JoinedTournamentsFragment : Fragment(R.layout.fragment_joined_tournaments) {
 
@@ -36,12 +37,22 @@ class JoinedTournamentsFragment : Fragment(R.layout.fragment_joined_tournaments)
         setUpRecyclerView()
 
         joinedTournamentAdapter.setOnTournamentClickListener {
-            findNavController().navigate(
-                JoinedTournamentsFragmentDirections.actionJoinedTournamentsFragmentToSetupTournamentFragment(
-                    id = it.id,
-                    title = it.tournamentName
+
+            if (it.scheduled == "Started") {
+                findNavController().navigate(
+                    JoinedTournamentsFragmentDirections.actionJoinedTournamentsFragmentToSetupTournamentFragment(
+                        id = it.id,
+                        title = it.tournamentName
+                    )
                 )
-            )
+            } else {
+                Snackbar.make(
+                    requireView(),
+                    "You can see the detail of tournament once it is started",
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
+
         }
 
         getUpdatedList()
@@ -65,20 +76,31 @@ class JoinedTournamentsFragment : Fragment(R.layout.fragment_joined_tournaments)
     }
 
     private fun getUpdatedList() {
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.IO).launch {
 
-            showProgress(true)
+            withContext(Dispatchers.Main) {
+                showProgress(true)
+            }
 
             try {
                 val tournamentList =
                     tournaments.whereArrayContains("persons", Firebase.auth.currentUser!!.uid).get()
                         .await().toObjects(Tournament::class.java)
-                joinedTournamentAdapter.tournamentList = tournamentList
+                withContext(Dispatchers.Main) {
+                    joinedTournamentAdapter.tournamentList = tournamentList
+                }
+
             } catch (e: Exception) {
-                Snackbar.make(requireView(), e.message.toString(), Snackbar.LENGTH_LONG).show()
+
+                withContext(Dispatchers.Main) {
+                    Snackbar.make(requireView(), e.message.toString(), Snackbar.LENGTH_LONG).show()
+                }
+
             }
 
-            showProgress(false)
+            withContext(Dispatchers.Main) {
+                showProgress(false)
+            }
 
         }
     }

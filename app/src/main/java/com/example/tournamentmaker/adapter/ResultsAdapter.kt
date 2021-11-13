@@ -9,13 +9,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tournamentmaker.data.entity.Tournament
 import com.example.tournamentmaker.data.entity.User
 import com.example.tournamentmaker.databinding.ListItemsResultBinding
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
-class ResultsAdapter() :
+class ResultsAdapter(val id: String) :
     RecyclerView.Adapter<ResultsAdapter.ResultsViewHolder>() {
 
     private val users = FirebaseFirestore.getInstance().collection("users")
@@ -49,22 +52,15 @@ class ResultsAdapter() :
         holder: ResultsViewHolder,
         position: Int
     ) {
+
         val result: Map<String, Map<String, Map<String, String>>> = resultList[position]
+
         holder.apply {
 
-            CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.IO).launch {
 
-                if (result.values.toList()[0].toList()[0].toList()[1].toString() == "{winner=}") {
-                    scorePerson1.isVisible = false
-                    scorePerson2.isVisible = false
-                } else {
-                    scorePerson1.isVisible = true
-                    scorePerson2.isVisible = true
-                    btnEdit.isVisible = false
-                }
-
-                val str = result.values.toList()[0].toList()[0].toList()[1].toString()
-                val winner = str.substringAfter("{winner=").substringBefore("}")
+                tournament =
+                    tournaments.document(id).get().await().toObject(Tournament::class.java)!!
 
                 val user1 =
                     users.document(result.keys.toList()[0]).get().await()
@@ -73,28 +69,45 @@ class ResultsAdapter() :
                     users.document(result.values.toList()[0].toList()[0].toList()[0].toString())
                         .get().await().toObject(User::class.java)!!
 
-                when (winner) {
-                    user1.uid -> {
-                        scorePerson1.text = "2"
-                        scorePerson2.text = "0"
-                    }
-                    user2.uid -> {
-                        scorePerson2.text = "2"
-                        scorePerson1.text = "0"
-                    }
-                    "Draw" -> {
-                        scorePerson1.text = "1"
-                        scorePerson2.text = "1"
-                    }
-                }
 
-                person1.text = user1.userName
-                person2.text = user2.userName
+                withContext(Dispatchers.Main) {
+
+                    btnEdit.isVisible = tournament.host == Firebase.auth.currentUser?.uid
+
+                    if (result.values.toList()[0].toList()[0].toList()[1].toString() == "{winner=}") {
+                        scorePerson1.isVisible = false
+                        scorePerson2.isVisible = false
+                    } else {
+                        scorePerson1.isVisible = true
+                        scorePerson2.isVisible = true
+                        btnEdit.isVisible = false
+                    }
+
+                    val str = result.values.toList()[0].toList()[0].toList()[1].toString()
+
+                    when (str.substringAfter("{winner=").substringBefore("}")) {
+                        user1.uid -> {
+                            scorePerson1.text = "2"
+                            scorePerson2.text = "0"
+                        }
+                        user2.uid -> {
+                            scorePerson2.text = "2"
+                            scorePerson1.text = "0"
+                        }
+                        "Draw" -> {
+                            scorePerson1.text = "1"
+                            scorePerson2.text = "1"
+                        }
+                    }
+
+                    person1.text = user1.userName
+                    person2.text = user2.userName
 
 
-                btnEdit.setOnClickListener {
-                    onEditClickListener?.let {
-                        it(arrayOf(user1.uid, user2.uid, position.toString()))
+                    btnEdit.setOnClickListener {
+                        onEditClickListener?.let {
+                            it(arrayOf(user1.uid, user2.uid, position.toString()))
+                        }
                     }
                 }
 
@@ -130,7 +143,7 @@ class ResultsAdapter() :
 
     private var onEditClickListener: ((Array<String>) -> Unit)? = null
 
-    fun setOnEitClickListener(listener: (Array<String>) -> Unit) {
+    fun setOnEditClickListener(listener: (Array<String>) -> Unit) {
         onEditClickListener = listener
     }
 

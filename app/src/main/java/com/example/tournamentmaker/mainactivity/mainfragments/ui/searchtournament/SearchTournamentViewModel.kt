@@ -26,9 +26,9 @@ class SearchTournamentViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
 
             val user = users.document(Firebase.auth.currentUser!!.uid).get().await()
-                .toObject(User::class.java)
+                .toObject(User::class.java)!!
 
-            if (user!!.tournamentsJoined.contains(id)) {
+            if (user.tournamentsJoined.contains(id)) {
                 showErrorMessage("You already joined the tournament")
                 return@launch
             }

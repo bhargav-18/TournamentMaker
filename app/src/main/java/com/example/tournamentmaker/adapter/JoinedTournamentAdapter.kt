@@ -17,6 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class JoinedTournamentAdapter() :
     RecyclerView.Adapter<JoinedTournamentAdapter.JoinedTournamentViewHolder>() {
@@ -54,13 +55,20 @@ class JoinedTournamentAdapter() :
     ) {
         val tournament: Tournament = tournamentList[position]
         holder.apply {
+
             tournamentName.text = tournament.tournamentName
             tournamentSport.text = tournament.tournamentSport
             tournamentScheduled.text = tournament.scheduled
-            CoroutineScope(Dispatchers.Main).launch {
+
+            CoroutineScope(Dispatchers.IO).launch {
+
                 val user = users.whereEqualTo("uid", tournament.host).get().await()
                     .toObjects(User::class.java)
-                tournamentHost.text = "Hosted by:\n" + user[0].userName
+
+                withContext(Dispatchers.Main){
+                    tournamentHost.text = "Hosted by:\n" + user[0].userName
+                }
+
             }
             personsJoined.text =
                 "${tournament.persons.size} / ${tournament.maxPersons}"

@@ -5,29 +5,33 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.tournamentmaker.R
-import com.example.tournamentmaker.data.entity.Tournament
 import com.example.tournamentmaker.data.entity.User
 import com.example.tournamentmaker.databinding.EditResultDialogBinding
+import com.example.tournamentmaker.util.exhaustive
 import com.example.tournamentmaker.util.hideKeyboard
-import com.google.firebase.firestore.FieldValue
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class EditResultDialogFragment : DialogFragment(R.layout.edit_result_dialog) {
 
     private lateinit var binding: EditResultDialogBinding
     private val args: EditResultDialogFragmentArgs by navArgs()
-    private val tournaments = FirebaseFirestore.getInstance().collection("tournaments")
+    private val viewModel: EditResultViewModel by viewModels()
     private val users = FirebaseFirestore.getInstance().collection("users")
 
     override fun onResume() {
@@ -46,8 +50,7 @@ class EditResultDialogFragment : DialogFragment(R.layout.edit_result_dialog) {
 
         binding.apply {
 
-
-            CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.IO).launch {
 
                 val user1 =
                     users.document(args.persons[0]).get().await()
@@ -56,30 +59,42 @@ class EditResultDialogFragment : DialogFragment(R.layout.edit_result_dialog) {
                     users.document(args.persons[1])
                         .get().await().toObject(User::class.java)!!
 
-                rbPerson1.text = user1.userName
-                rbPerson2.text = user2.userName
+                withContext(Dispatchers.Main) {
+                    rbPerson1.text = user1.userName
+                    rbPerson2.text = user2.userName
+                }
 
             }
 
-            val position = args.persons[2]
+            etPerson1Score.setText(viewModel.scoreP1)
+            etPerson2Score.setText(viewModel.scoreP2)
 
-            var winner = ""
 
             rgWinner.setOnCheckedChangeListener { _, checkedId ->
 
-                winner = when (checkedId) {
+                when (checkedId) {
                     R.id.rb_person1 -> {
-                        args.persons[0]
+                        viewModel.winner = args.persons[0]
                     }
                     R.id.rb_person2 -> {
-                        args.persons[1]
+                        viewModel.winner = args.persons[1]
                     }
-                    else -> {
-                        "Draw"
+                    R.id.rb_draw -> {
+                        viewModel.winner = "Draw"
                     }
                 }
 
             }
+
+
+            etPerson1Score.addTextChangedListener {
+                viewModel.scoreP1 = it.toString()
+            }
+
+            etPerson2Score.addTextChangedListener {
+                viewModel.scoreP2 = it.toString()
+            }
+
 
             btnUpdateResult.setOnClickListener {
 
@@ -87,85 +102,36 @@ class EditResultDialogFragment : DialogFragment(R.layout.edit_result_dialog) {
 
                 showProgress(true)
 
-                if (rgWinner.checkedRadioButtonId == -1) {
-                    Toast.makeText(context, "Please select the winner", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
+                viewModel.updateResult(
+                    id = args.id,
+                    person1 = args.persons[0],
+                    person2 = args.persons[1],
+                    position = args.persons[2].toInt()
+                )
 
-                val map: Map<String, Map<String, Map<String, String>>> =
-                    mapOf(args.persons[0] to mapOf(args.persons[1] to mapOf("winner" to winner)))
-
-                CoroutineScope(Dispatchers.Main).launch {
-
-                    val tournament =
-                        tournaments.document(args.id).get().await()
-                            .toObject(Tournament::class.java)!!
-
-                    val matchesArray = tournament.matches
-
-                    matchesArray.removeAt(position.toInt())
-                    matchesArray.add(position.toInt(), map)
-
-                    tournaments.document(args.id)
-                        .update("matches", matchesArray).await()
-
-                    tournaments.document(args.id)
-                        .update("results.${args.persons[0]}.played", FieldValue.increment(1))
-
-                    when (winner) {
-                        args.persons[0] -> {
-                            tournaments.document(args.id)
-                                .update("results.${args.persons[0]}.won", FieldValue.increment(1))
-                                .await()
-
-                            tournaments.document(args.id)
-                                .update("results.${args.persons[1]}.lost", FieldValue.increment(1))
-                                .await()
-                        }
-                        "Draw" -> {
-                            tournaments.document(args.id)
-                                .update("results.${args.persons[0]}.draw", FieldValue.increment(1))
-                                .await()
-
-                            tournaments.document(args.id)
-                                .update("results.${args.persons[1]}.draw", FieldValue.increment(1))
-                                .await()
-                        }
-                        else -> {
-                            tournaments.document(args.id)
-                                .update("results.${args.persons[0]}.lost", FieldValue.increment(1))
-                                .await()
-
-                            tournaments.document(args.id)
-                                .update("results.${args.persons[1]}.won", FieldValue.increment(1))
-                                .await()
-                        }
-                    }
-
-                    tournaments.document(args.id)
-                        .update(
-                            "results.${args.persons[0]}.tieBreaker",
-                            FieldValue.increment(etPerson1Score.text.toString().toLong())
-                        ).await()
-
-                    tournaments.document(args.id)
-                        .update(
-                            "results.${args.persons[1]}.tieBreaker",
-                            FieldValue.increment(etPerson2Score.text.toString().toLong())
-                        ).await()
-
-                    showProgress(false)
-
-                    findNavController().navigate(
-                        EditResultDialogFragmentDirections
-                            .actionEditResultDialogFragmentToResultsFragment(
-                                id = tournament.id
-                            )
-                    )
-
-                }
             }
 
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.editResultEvent.collect { event ->
+                @Suppress("IMPLICIT_CAST_TO_ANY")
+                when (event) {
+                    is EditResultViewModel.EditResultEvent.NavigateBackWithResult -> {
+                        showProgress(false)
+                        findNavController().navigate(
+                            EditResultDialogFragmentDirections
+                                .actionEditResultDialogFragmentToResultsFragment(
+                                    id = args.id
+                                )
+                        )
+                    }
+                    is EditResultViewModel.EditResultEvent.ShowErrorMessage -> {
+                        showProgress(false)
+                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
+                    }
+                }.exhaustive
+            }
         }
 
     }

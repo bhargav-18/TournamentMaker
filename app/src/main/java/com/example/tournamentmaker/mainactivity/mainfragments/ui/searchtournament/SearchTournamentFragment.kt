@@ -28,6 +28,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class SearchTournamentFragment : Fragment(R.layout.fragment_search_tournament) {
 
@@ -44,15 +45,6 @@ class SearchTournamentFragment : Fragment(R.layout.fragment_search_tournament) {
         searchTournamentAdapter = SearchTournamentAdapter()
 
         setUpRecyclerView()
-
-        searchTournamentAdapter.setOnTournamentClickListener {
-            findNavController().navigate(
-                SearchTournamentFragmentDirections.actionSearchTournamentFragmentToSetupTournamentFragment(
-                    id = it.id,
-                    title = it.tournamentName
-                )
-            )
-        }
 
         searchTournamentAdapter.setOnJoinClickListener { tournament ->
 
@@ -131,20 +123,32 @@ class SearchTournamentFragment : Fragment(R.layout.fragment_search_tournament) {
 
     private fun getUpdatedList() {
 
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.IO).launch {
 
-            showProgress(true)
+            withContext(Dispatchers.Main) {
+                showProgress(true)
+            }
+
 
             try {
                 val tournamentList =
                     tournaments.whereEqualTo("scheduled", "Scheduled")
                         .get().await().toObjects(Tournament::class.java)
-                searchTournamentAdapter.tournamentList = tournamentList
+
+                withContext(Dispatchers.Main) {
+                    searchTournamentAdapter.tournamentList = tournamentList
+                }
+
             } catch (e: Exception) {
-                Snackbar.make(requireView(), e.message.toString(), Snackbar.LENGTH_LONG).show()
+                withContext(Dispatchers.Main) {
+                    Snackbar.make(requireView(), e.message.toString(), Snackbar.LENGTH_LONG).show()
+                }
+
             }
 
-            showProgress(false)
+            withContext(Dispatchers.Main) {
+                showProgress(false)
+            }
 
         }
     }
