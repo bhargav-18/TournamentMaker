@@ -9,6 +9,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.TableRow
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
@@ -71,7 +72,10 @@ class CreateMatchesFragment : Fragment(R.layout.fragment_create_matches) {
 
         val numTeams = ListTeam.size
         if (ListTeam.size % 2 != 0) {
-            ListTeam.add("Bye")
+            Toast.makeText(context, "Cannot start with odd number of players", Toast.LENGTH_SHORT)
+                .show()
+            showProgress(false)
+            return
         }
         var numDays: Int = numTeams - 1
         var halfSize: Int = numTeams / 2

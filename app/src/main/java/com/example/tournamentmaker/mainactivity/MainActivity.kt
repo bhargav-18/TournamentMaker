@@ -19,11 +19,18 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.tournamentmaker.R
+import com.example.tournamentmaker.notification.NotificationService
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var drawerLayout: DrawerLayout
     lateinit var toggle: ActionBarDrawerToggle
+    private val users = FirebaseFirestore.getInstance().collection("users")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,6 +87,15 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.action_global_profileFragment)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            FirebaseMessaging.getInstance().token.await().also {
+                NotificationService.token = it
+                users.document(Firebase.auth.currentUser!!.uid)
+                    .update("token", it).await()
+            }
+        }
+        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
 
     }
 
@@ -150,3 +167,8 @@ class MainActivity : AppCompatActivity() {
 }
 
 const val MAIN_RESULT_OK = Activity.RESULT_FIRST_USER + 1
+const val BASE_URL = "https://fcm.googleapis.com"
+const val SERVER_KEY =
+    "AAAAFLKFOYI:APA91bGdu5JD9KqfvcMVJR9q0LPGCyRX0HkpFLJgFtg61_u7q4oSP0U6AZmY347renrPimJ4N6_W7LW6NjvV1RIfoALzKC1NdTnVAY7-AjyIQawHgWkLmup6LY6PqRXegD1kqIchnlMs"
+const val CONTENT_TYPE = "application/json"
+const val TOPIC = "/topics/myTopic2"

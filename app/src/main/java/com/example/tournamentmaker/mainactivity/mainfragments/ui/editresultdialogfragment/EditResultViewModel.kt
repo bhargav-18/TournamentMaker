@@ -1,12 +1,23 @@
 package com.example.tournamentmaker.mainactivity.mainfragments.ui.editresultdialogfragment
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tournamentmaker.data.entity.Tournament
+import com.example.tournamentmaker.data.entity.User
 import com.example.tournamentmaker.mainactivity.MAIN_RESULT_OK
+import com.example.tournamentmaker.notification.NotificationData
+import com.example.tournamentmaker.notification.NotificationService
+import com.example.tournamentmaker.notification.PushNotification
+import com.example.tournamentmaker.notification.RetrofitInstance
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -122,12 +133,40 @@ class EditResultViewModel(
                         FieldValue.increment(scoreP2.toLong())
                     ).await()
 
+                val persons = tournament.persons
+
+                for (p in persons) {
+                    val token = users.document(p).get().await().toObject(User::class.java)!!.token
+
+                    if (p == Firebase.auth.currentUser!!.uid) {
+                        PushNotification(
+                            NotificationData("A result has came", "Come back to check the winner"),
+                            token
+                        ).also {
+                            sendNotification(it)
+                        }
+                    }
+                }
 
                 editResultEventChannel.send(EditResultEvent.NavigateBackWithResult(MAIN_RESULT_OK))
 
             }
         }
     }
+
+    private fun sendNotification(notification: PushNotification) =
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = RetrofitInstance.api.postNotification(notification)
+                if (response.isSuccessful) {
+                    Log.d("TAG_EDIT_RESULT", "Response: ${Gson().toJson(response)}")
+                } else {
+                    showErrorMessage(response.errorBody().toString())
+                }
+            } catch (e: Exception) {
+                showErrorMessage(e.message.toString())
+            }
+        }
 
 
     private fun showErrorMessage(text: String) = viewModelScope.launch {

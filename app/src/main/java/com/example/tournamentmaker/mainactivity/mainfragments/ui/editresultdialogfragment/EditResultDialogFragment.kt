@@ -1,6 +1,7 @@
 package com.example.tournamentmaker.mainactivity.mainfragments.ui.editresultdialogfragment
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -16,10 +17,12 @@ import androidx.navigation.fragment.navArgs
 import com.example.tournamentmaker.R
 import com.example.tournamentmaker.data.entity.User
 import com.example.tournamentmaker.databinding.EditResultDialogBinding
+import com.example.tournamentmaker.notification.NotificationService
 import com.example.tournamentmaker.util.exhaustive
 import com.example.tournamentmaker.util.hideKeyboard
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -94,7 +97,6 @@ class EditResultDialogFragment : DialogFragment(R.layout.edit_result_dialog) {
             etPerson2Score.addTextChangedListener {
                 viewModel.scoreP2 = it.toString()
             }
-
 
             btnUpdateResult.setOnClickListener {
 

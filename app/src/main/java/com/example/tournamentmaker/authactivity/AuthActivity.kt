@@ -22,13 +22,6 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
 
-        if (FirebaseAuth.getInstance().currentUser != null) {
-            Intent(this, MainActivity::class.java).also {
-                startActivity(it)
-                finish()
-            }
-        }
-
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_auth) as NavHostFragment
         navController = navHostFragment.findNavController()
