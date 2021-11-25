@@ -138,7 +138,7 @@ class EditResultViewModel(
                 for (p in persons) {
                     val token = users.document(p).get().await().toObject(User::class.java)!!.token
 
-                    if (p == Firebase.auth.currentUser!!.uid) {
+                    if (p != Firebase.auth.currentUser!!.uid) {
                         PushNotification(
                             NotificationData("A result has came", "Come back to check the winner"),
                             token
