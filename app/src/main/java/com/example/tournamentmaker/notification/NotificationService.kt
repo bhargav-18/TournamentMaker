@@ -44,6 +44,7 @@ class NotificationService : FirebaseMessagingService() {
         super.onMessageReceived(message)
 
         val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("type", "noti")
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationID = Random.nextInt()

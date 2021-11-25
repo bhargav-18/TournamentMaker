@@ -76,6 +76,10 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
         NavigationUI.setupWithNavController(navView, navController)
 
+        if (intent.getStringExtra("type") == "noti"){
+            navController.navigate(R.id.joinedTournamentsFragment)
+        }
+
         val headerView: View = navView.getHeaderView(0)
         val userEmail = headerView.findViewById<TextView>(R.id.text_view_user_email)
         val userName = headerView.findViewById<TextView>(R.id.text_view_user_name)
