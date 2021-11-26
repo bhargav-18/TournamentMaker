@@ -23,6 +23,7 @@ It will clone this app in your personal pc.
 Drive:/project-name/app/build/outputs/
 
 5. If you directly want the app you can download it from the below mentioned link
+
 https://drive.google.com/u/0/uc?export=download&confirm=A-TZ&id=1AJoj0DtKlpv01aCzRmvB7uH1_J0ZrlxM
 
 
