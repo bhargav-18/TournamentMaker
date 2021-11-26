@@ -29,7 +29,7 @@ https://drive.google.com/u/0/uc?export=download&confirm=A-TZ&id=1AJoj0DtKlpv01aC
 
 ## Tech/Dependencies's used
 
-1.  Used MVVM (by creating events and using flow)
+1.  Used viewmodels, events  and flow for cleaner code
 2.  Used firebase for backend like: 
 - authentication
 - to store data (firestore) 
