@@ -18,7 +18,8 @@ It will clone this app in your personal pc.
 
 ![alternatetext](https://firebasestorage.googleapis.com/v0/b/tournament-maker-478a7.appspot.com/o/Screenshot%202021-11-26%20204540.jpg?alt=media&token=2e88a6ec-48a6-4c7c-9863-78762b6b2439)
 
-4. The app can be found in your computer at the below mentioned path
+4. The app can be found in your computer at the below mentioned path.
+
 Drive:/project-name/app/build/outputs/
 
 5. If you directly want the app you can download it from the below mentioned link
