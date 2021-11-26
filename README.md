@@ -35,5 +35,5 @@ https://drive.google.com/u/0/uc?export=download&confirm=A-TZ&id=1AJoj0DtKlpv01aC
 - to store data (firestore) 
 - to send notification (cloud messaging)
 3. Used coroutines for background processes.
-4. Used retrofit for posting notification service request to cloud messaging firebase.
+4. Used retrofit to create HTTP requests ( specifically for posting request for cloud messaging )
 
