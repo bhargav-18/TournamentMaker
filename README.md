@@ -15,6 +15,7 @@ It will clone this app in your personal pc.
 ![alternatetext](https://firebasestorage.googleapis.com/v0/b/tournament-maker-478a7.appspot.com/o/Screenshot%202021-11-26%20203730.jpg?alt=media&token=41f091b5-207f-4437-9bed-23e5c1782e26)
  
 3. Click on build tab and build apk to use this app on your mobile device. It will create an apk that can be shared and can be installed on multiple devices.
+
 ![alternatetext](https://firebasestorage.googleapis.com/v0/b/tournament-maker-478a7.appspot.com/o/Screenshot%202021-11-26%20204540.jpg?alt=media&token=2e88a6ec-48a6-4c7c-9863-78762b6b2439)
 
 4. The app can be found in your computer at the below mentioned path
