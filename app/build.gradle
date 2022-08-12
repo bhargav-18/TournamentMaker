@@ -9,7 +9,7 @@ plugins {
 android {
     signingConfigs {
         release {
-            storeFile file('F:\\tournament key.jks')
+            storeFile file('C:\\old data\\tournament key.jks')
             storePassword 'tournament'
             keyAlias 'key0'
             keyPassword 'tournament'
