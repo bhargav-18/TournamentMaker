@@ -7,7 +7,7 @@ Create and organize your own tournaments.
 
 1. Open android studio and click on file on the menu ribbon, then click on new project from version control.
 
-![alternatetext](Screenshot 2021-11-26 204100.jpg)
+![alternatetext](https://github.com/bhargav-18/TournamentMaker/blob/main/Screenshot%202021-11-26%20204100.jpg)
 
 2. Copy this repository's url or copy this link https://github.com/bhargav-18/TournamentMaker.git and paste it in the URL field and click on clone.
 It will clone this app in your personal pc.
