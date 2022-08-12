@@ -37,35 +37,3 @@ https://drive.google.com/u/0/uc?export=download&confirm=A-TZ&id=1AJoj0DtKlpv01aC
 3. Used coroutines for background processes.
 4. Used retrofit to create HTTP requests ( specifically for posting request for cloud messaging )
 
-
-## Screenshots
-
-![App Screenshot](https://firebasestorage.googleapis.com/v0/b/tournament-maker-478a7.appspot.com/o/1.png?alt=media&token=a823090a-6f75-4b40-94fe-82df690a1727)
-
-![App Screenshot](https://firebasestorage.googleapis.com/v0/b/tournament-maker-478a7.appspot.com/o/2.png?alt=media&token=2f6394bd-4164-4f84-9d4e-f41db3a28acc)
-
-![App Screenshot](https://firebasestorage.googleapis.com/v0/b/tournament-maker-478a7.appspot.com/o/3.png?alt=media&token=7e4dc9c6-e7e7-490c-ba3f-f3e6ed8fd207)
-
-![App Screenshot](https://firebasestorage.googleapis.com/v0/b/tournament-maker-478a7.appspot.com/o/4.png?alt=media&token=b597805d-be29-4f6d-8a90-4b313b8c8b8d)
-
-![App Screenshot](https://firebasestorage.googleapis.com/v0/b/tournament-maker-478a7.appspot.com/o/5.png?alt=media&token=e6952939-f12a-4316-8170-14b003e325db)
-
-![App Screenshot](https://firebasestorage.googleapis.com/v0/b/tournament-maker-478a7.appspot.com/o/6.png?alt=media&token=aa97d689-a955-4e9f-9256-2ee87ed4ec44)
-
-![App Screenshot](https://firebasestorage.googleapis.com/v0/b/tournament-maker-478a7.appspot.com/o/7.png?alt=media&token=95e687f6-28c9-492f-aa6e-552122ba16a7)
-
-![App Screenshot](https://firebasestorage.googleapis.com/v0/b/tournament-maker-478a7.appspot.com/o/8.png?alt=media&token=983dbf76-0d07-423b-aed5-ac86220daeb7)
-
-![App Screenshot](https://firebasestorage.googleapis.com/v0/b/tournament-maker-478a7.appspot.com/o/9.png?alt=media&token=71e6bbfe-f036-45e1-a85c-904c8652ed98)
-
-![App Screenshot](https://firebasestorage.googleapis.com/v0/b/tournament-maker-478a7.appspot.com/o/10.png?alt=media&token=65896013-259b-4f44-92d4-29f49f91d7b4)
-
-![App Screenshot](https://firebasestorage.googleapis.com/v0/b/tournament-maker-478a7.appspot.com/o/12.png?alt=media&token=ecd6d441-9097-475c-a08f-b6a76c6c0109)
-
-![App Screenshot](https://firebasestorage.googleapis.com/v0/b/tournament-maker-478a7.appspot.com/o/13.png?alt=media&token=297f9375-a689-4ff5-9088-c9318e0292a6)
-
-![App Screenshot](https://firebasestorage.googleapis.com/v0/b/tournament-maker-478a7.appspot.com/o/14.png?alt=media&token=799ef2e8-2a0e-41bc-9f80-7e907e2acecb)
-
-![App Screenshot](https://firebasestorage.googleapis.com/v0/b/tournament-maker-478a7.appspot.com/o/15.png?alt=media&token=cc55cdb9-b479-4aba-bca8-663577856014)
-
-![App Screenshot](https://firebasestorage.googleapis.com/v0/b/tournament-maker-478a7.appspot.com/o/16.png?alt=media&token=cedbb215-0940-4386-905d-ea2170cb661a)
